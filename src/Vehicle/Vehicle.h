@@ -40,6 +40,8 @@
 #include "VehicleEscStatusFactGroup.h"
 #include "VehicleEstimatorStatusFactGroup.h"
 #include "VehicleHygrometerFactGroup.h"
+//2022730喷雾器
+#include  "VehicleFlowratemeterFactGroup.h"
 #include "VehicleLinkManager.h"
 #include "MissionManager.h"
 #include "GeoFenceManager.h"
@@ -317,8 +319,11 @@ public:
     Q_PROPERTY(FactGroup*           localPosition   READ localPositionFactGroup     CONSTANT)
     Q_PROPERTY(FactGroup*           localPositionSetpoint READ localPositionSetpointFactGroup CONSTANT)
     Q_PROPERTY(FactGroup*           hygrometer      READ hygrometerFactGroup        CONSTANT)
+    //2022730
+    Q_PROPERTY(FactGroup*           flowratemeter   READ flowRatemeterFactGroup     CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
+
 
     Q_PROPERTY(int      firmwareMajorVersion        READ firmwareMajorVersion       NOTIFY firmwareVersionChanged)
     Q_PROPERTY(int      firmwareMinorVersion        READ firmwareMinorVersion       NOTIFY firmwareVersionChanged)
@@ -662,6 +667,8 @@ public:
     FactGroup* estimatorStatusFactGroup     () { return &_estimatorStatusFactGroup; }
     FactGroup* terrainFactGroup             () { return &_terrainFactGroup; }
     FactGroup* hygrometerFactGroup          () { return &_hygrometerFactGroup; }
+    //2022730
+    FactGroup* flowRatemeterFactGroup       () { return &_flowRatemeterFactGroup; }    //自己添加
     QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
 
     MissionManager*                 missionManager      () { return _missionManager; }
@@ -940,8 +947,29 @@ signals:
     void gimbalDataChanged              ();
     void isROIEnabledChanged            ();
     void initialConnectComplete         ();
-
     void sensorsParametersResetAck      (bool success);
+// 2022 730
+//无人机起飞信号
+    void vehicleTakeOff();
+//无人机降落
+    void vehicleLand();
+//无人机喷头喷雾状态
+    void vehicleSprayState(bool type);
+//无人机UID
+    void vehicleUid(QString uid);
+//无人机流速获取之后分为 小数整数 暂时未使用
+    void vehicleFlowRate(uint8_t flowrate);
+//无人机作业面积(注意要累加)
+    void vehicleWorkArea(double workarea);
+//无人机经度
+    void vehicleLongitude(double lot);
+//无人机维度
+    void vehicleLatitude(double lat);
+//无人机高度飞行高度
+    void vehicleFlighTaltiTude(double flighttaltitude);
+//无人机飞行速度(地速)
+    void vehicleGroundSpeed(double GroundSpeed);
+
 
 private slots:
     void _mavlinkMessageReceived            (LinkInterface* link, mavlink_message_t message);
@@ -1004,6 +1032,11 @@ private:
     void _handleObstacleDistance        (const mavlink_message_t& message);
     void _handleEvent(uint8_t comp_id, std::unique_ptr<events::parser::ParsedEvent> event);
     // ArduPilot dialect messages
+//2022730
+#if !defined(NO_FLOWRATE_CONTROL)
+    void _handleFlowRatemeter           (mavlink_message_t& message);
+#endif
+
 #if !defined(NO_ARDUPILOT_DIALECT)
     void _handleCameraFeedback          (const mavlink_message_t& message);
 #endif
@@ -1320,6 +1353,8 @@ private:
     VehicleHygrometerFactGroup      _hygrometerFactGroup;
     TerrainFactGroup                _terrainFactGroup;
     QmlObjectListModel              _batteryFactGroupListModel;
+    //2022730
+    VehicleFlowRatemeterFactGroup   _flowRatemeterFactGroup;
 
     TerrainProtocolHandler* _terrainProtocolHandler = nullptr;
 
@@ -1371,6 +1406,8 @@ private:
     static const char* _estimatorStatusFactGroupName;
     static const char* _hygrometerFactGroupName;
     static const char* _terrainFactGroupName;
+    //2022730
+    static const char* _flowRatemeterFactGroupName;
 
     static const int _vehicleUIUpdateRateMSecs      = 100;
 

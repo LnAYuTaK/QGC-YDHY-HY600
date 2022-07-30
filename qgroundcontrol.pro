@@ -428,7 +428,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 #
 
 HEADERS += \
-    src/DataHandle/DataHandleTools.h \
+    src/DataHandle/DataManager.h \
     src/DataHandle/DataSender.h \
     src/NetWorkLayer/NetLayer.h \
     src/NetWorkLayer/NetManage.h \
@@ -436,6 +436,7 @@ HEADERS += \
     src/QmlControls/QmlUnitsConversion.h \
     src/Settings/HySettings.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
+    src/Vehicle/VehicleFlowratemeterFactGroup.h \
     src/api/QGCCorePlugin.h \
     src/api/QGCOptions.h \
     src/api/QGCSettings.h \
@@ -448,13 +449,14 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 }
 
 SOURCES += \
-    src/DataHandle/DataHandleTools.cpp \
+    src/DataHandle/DataManager.cpp \
     src/DataHandle/DataSender.cpp \
     src/NetWorkLayer/NetLayer.cpp \
     src/NetWorkLayer/NetManage.cpp \
     src/NetWorkLayer/ParaEditor.cpp \
     src/Settings/HySettings.cpp \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
+    src/Vehicle/VehicleFlowratemeterFactGroup.cpp \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \
     src/api/QGCSettings.cc \
