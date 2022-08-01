@@ -1108,13 +1108,12 @@ void Vehicle::_handleAttitudeQuaternion(mavlink_message_t& message)
     pitchRate()->setRawValue(qRadiansToDegrees(rates[1]));
     yawRate()->setRawValue(qRadiansToDegrees(rates[2]));
 }
-
 void Vehicle::_handleGpsRawInt(mavlink_message_t& message)
 {
     mavlink_gps_raw_int_t gpsRawInt;
     mavlink_msg_gps_raw_int_decode(&message, &gpsRawInt);
     //202281
-    emit _vehicleFlightTime(QString(gpsRawInt.time_usec));
+    emit vehicleFlightTime(QString::number(gpsRawInt.time_usec));
     _gpsRawIntMessageAvailable = true;
 
     if (gpsRawInt.fix_type >= GPS_FIX_TYPE_3D_FIX) {

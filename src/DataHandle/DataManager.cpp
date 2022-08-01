@@ -18,11 +18,11 @@ VehicleDataFactPack::VehicleDataFactPack(QObject *parent)
 
 }
 
-void VehicleDataFactPack::_vehicleFlightTime()
+void VehicleDataFactPack::_vehicleFlightTime(QString time)
 {
     if(!_upDataFlightFlag){
-        //updataTime
-      _upDataFlightFlag= true;
+       _flightTime       = time;
+       _upDataFlightFlag = true;
     }
 }
 
@@ -35,7 +35,6 @@ void VehicleDataFactPack::_vehicleLand()
 {
     _flightState= false;
     _upDataFlightFlag= false;
-
 }
 //fool function
 void VehicleDataFactPack::_vehicleSprayState(bool isOpen)
@@ -60,7 +59,10 @@ void VehicleDataFactPack::_vehicleFlowRate(uint8_t flowRate)
 
 void VehicleDataFactPack::_vehicleWorkArea(double workArea)
 {
-    _workArea =workArea;
+    //ÀÛ¼ÆÃæ»ý
+    if(_sprayStat>0){
+     _workArea += workArea;
+    }
 }
 
 void VehicleDataFactPack::_vehicleLongitude(double lot)
@@ -90,7 +92,7 @@ void VehicleDataFactPack::_vehicleLevelGaugeStatus(bool gaugetype)
 
 void VehicleDataFactPack::_vehicleFlightMode(QString flightmodetype)
 {
-
+    _flightMode =flightmodetype;
 }
 
 //DataManager Class

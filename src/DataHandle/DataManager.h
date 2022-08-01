@@ -26,6 +26,8 @@ public:
       Q_INVOKABLE double   lat            () {return _lat;}
       Q_INVOKABLE double   flightTailTude () {return _flightTailTude;}
       Q_INVOKABLE double   groundSpeed    () {return _groundSpeed;}
+      Q_INVOKABLE QString  flightMode     () {return _flightMode;}
+
       //飞行模式类型// 还有别的类型后续添加
       QStringList FlightModeType {
       "PreFlight",
@@ -51,6 +53,7 @@ private:
       static bool      _gaugetype;
       //
       static bool      _upDataFlightFlag;
+      static QString   _flightMode;
 //处理从Vehcile接收的数据
 public slots:
 //无人机起飞
@@ -58,7 +61,7 @@ public slots:
 //无人机降落
   void _vehicleLand();
 //无人机起飞时间
-  void _vehicleFlightTime();
+  void _vehicleFlightTime(QString time);
 //无人机喷头喷头状态是否打开
   void _vehicleSprayState(bool isOpen);
 //无人机UID √
