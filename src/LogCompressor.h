@@ -10,7 +10,7 @@
 #pragma once
 
 #include <QThread>
-
+///读取msg生成csv文件
 /**
  * @file
  *   @brief Declaration of class LogCompressor.

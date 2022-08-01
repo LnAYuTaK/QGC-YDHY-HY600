@@ -14,7 +14,7 @@
 //QGC Head
 #include "QGCApplication.h"
 #include "HySettings.h"
-
+//这里准备重构一下作为网络任务基类
 class NetLayer : public QObject
 {
     Q_OBJECT
@@ -22,14 +22,12 @@ public:
     explicit NetLayer(QObject *parent = nullptr);
     //任务定时器
     QTimer*  TaskTimeOut ;
-
     //回复给QML显示的错误类型枚举
 private:
 
 public slots:
     //Task
     void SendBinLogFile(QString);
-
     //Task
     //void SendData();
 signals:

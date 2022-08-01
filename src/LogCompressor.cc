@@ -67,8 +67,6 @@ void LogCompressor::run()
 		_signalCriticalError(tr("Log Compressor: Cannot start/compress log file, since output file %1 is not writable").arg(QFileInfo(outTmpFile.fileName()).absoluteFilePath()));
 		return;
 	}
-
-
 	// First we search the input file through keySearchLimit number of lines
 	// looking for variables. This is necessary before CSV files require
 	// the same number of fields for every line.

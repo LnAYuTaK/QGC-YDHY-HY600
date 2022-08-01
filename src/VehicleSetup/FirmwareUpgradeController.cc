@@ -402,7 +402,7 @@ void FirmwareUpgradeController::_firmwareDownloadProgress(qint64 curr, qint64 to
         _progressBar->setProperty("value", static_cast<float>(curr) / static_cast<float>(total));
     }
 }
-
+///通过网络下载固件
 /// @brief Called when the firmware download completes.
 void FirmwareUpgradeController::_firmwareDownloadComplete(QString /*remoteFile*/, QString localFile, QString errorMsg)
 {

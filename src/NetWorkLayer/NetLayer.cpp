@@ -10,7 +10,6 @@ NetLayer::NetLayer(QObject *parent)
 void NetLayer::SendBinLogFile(QString filename)
 {
     QTcpSocket *NetSocket = new QTcpSocket;
-
     QString IP =  "192.168.3.113";
     qint64 Port = 8900;
    // qDebug()<< "Send" << filename << IP << Port;
@@ -23,18 +22,10 @@ void NetLayer::SendBinLogFile(QString filename)
          NetSocket->deleteLater();
          return;
     }
-//    QByteArray block;
-//    QDataStream out(&block, QIODevice::WriteOnly);
-//    out.setVersion(QDataStream::Qt_5_12);
     QFileInfo fileInfo(filename);
     QString FileName = fileInfo.baseName();
     QByteArray filedata = m_file.readAll();
-//    block.append(filedata);
-//    m_file.close();
-//    out.device()->seek(0);
-//    out << (quint32)(block.size() - sizeof(quint32));
-    //qint64 x = 0;
-    //????MD5????
+
     QByteArray md5 = QCryptographicHash::hash(filedata, QCryptographicHash::Md5);
     //?FFFF +Md5?????+ UserID + ???????   //Hex
 
@@ -46,16 +37,9 @@ void NetLayer::SendBinLogFile(QString filename)
     Q_UNUSED(ReqPackSize)
     qint64 sendsize = NetSocket->write(filedata);
     qDebug()<< sendsize;
-//    while (x < block.size()){
-//        qint64 y = NetSocket->write(block);
-//        x += y;
-//        qDebug() << "Sendsize"<< x;
-//    }
-    //?????????? ????????? ????????????? ???5?????????????????????????
-    //????this??????
-      TaskTimeOut =new QTimer(this);
-      TaskTimeOut->setTimerType(Qt::PreciseTimer);
-      TaskTimeOut->start(5000);
+    TaskTimeOut =new QTimer(this);
+    TaskTimeOut->setTimerType(Qt::PreciseTimer);
+    TaskTimeOut->start(5000);
       while (TaskTimeOut->remainingTime()>0)
       {
           if (NetSocket->waitForReadyRead(10)){

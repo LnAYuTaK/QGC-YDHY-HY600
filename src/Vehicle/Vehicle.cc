@@ -199,6 +199,8 @@ Vehicle::Vehicle(LinkInterface*             link,
 
     _commonInit();
 
+
+
     _vehicleLinkManager->_addLink(link);
 
     // Set video stream to udp if running ArduSub and Video is disabled
@@ -270,7 +272,7 @@ Vehicle::Vehicle(LinkInterface*             link,
 
 }
 
-// Disconnected Vehicle for offline editing  //ÍÑ»ú±à¼­
+// Disconnected Vehicle for offline editing
 Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
                  MAV_TYPE                   vehicleType,
                  FirmwarePluginManager*     firmwarePluginManager,
@@ -1002,6 +1004,8 @@ void Vehicle::_handleVfrHud(mavlink_message_t& message)
         _altitudeTuningOffset = vfrHud.alt;
     }
     _altitudeTuningFact.setRawValue(vfrHud.alt - _altitudeTuningOffset);
+    //2022730
+    emit vehicleGroundFlightSpeed(double(qIsNaN(vfrHud.groundspeed) ? 0 : vfrHud.groundspeed));
 }
 
 void Vehicle::_handleNavControllerOutput(mavlink_message_t& message)
@@ -1109,9 +1113,8 @@ void Vehicle::_handleGpsRawInt(mavlink_message_t& message)
 {
     mavlink_gps_raw_int_t gpsRawInt;
     mavlink_msg_gps_raw_int_decode(&message, &gpsRawInt);
-#ifdef debugTest
-    qDebug()<< "Time" << gpsRawInt.time_usec;
-#endif
+    //202281
+    emit _vehicleFlightTime(QString(gpsRawInt.time_usec));
     _gpsRawIntMessageAvailable = true;
 
     if (gpsRawInt.fix_type >= GPS_FIX_TYPE_3D_FIX) {
@@ -1353,6 +1356,7 @@ QString Vehicle::vehicleUIDStr()
             pUid[5] & 0xff,
             pUid[6] & 0xff,
             pUid[7] & 0xff);
+    //2022730
     emit vehicleUid(uid);
     return uid;
 }
@@ -1543,6 +1547,7 @@ void Vehicle::_updateArmed(bool armed)
             // Reset battery warning
             _lowestBatteryChargeStateAnnouncedMap.clear();
        //2022730
+            emit vehicleDataSendTime();
             emit vehicleTakeOff();
         } else {
             _trajectoryPoints->stop();
@@ -1844,7 +1849,6 @@ bool Vehicle::sendMessageOnLinkThreadSafe(LinkInterface* link, mavlink_message_t
     link->writeBytesThreadSafe((const char*)buffer, len);
     _messagesSent++;
     emit messagesSentChanged();
-
     return true;
 }
 
@@ -2496,6 +2500,8 @@ void Vehicle::_handleFlightModeChanged(const QString& flightMode)
 {
     _say(tr("%1 %2 flight mode").arg(_vehicleIdSpeech()).arg(flightMode));
     emit guidedModeChanged(_firmwarePlugin->isGuidedMode(this));
+    qDebug()<<flightMode;
+    vehicleFlightMode(flightMode);
 }
 
 void Vehicle::_announceArmedChanged(bool armed)
@@ -3974,6 +3980,7 @@ void Vehicle::_handleObstacleDistance(const mavlink_message_t& message)
 void Vehicle::updateFlightDistance(double distance)
 {
     _flightDistanceFact.setRawValue(_flightDistanceFact.rawValue().toDouble() + distance);
+    //2022730
     emit vehicleWorkArea(distance);
 }
 

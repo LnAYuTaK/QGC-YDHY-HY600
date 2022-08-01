@@ -682,6 +682,12 @@ public:
     VehicleObjectAvoidance*         objectAvoidance     () { return _objectAvoidance; }
     Autotune*                       autotune            () const { return _autotune; }
 
+
+    //202281 添加一个获取VehicleID的方法
+    int  vehcileId(int vehicleId);
+
+
+
     static const int cMaxRcChannels = 18;
 
     /// Sends the specified MAV_CMD to the vehicle. If no Ack is received command will be retried. If a sendMavCommand is already in progress
@@ -948,28 +954,38 @@ signals:
     void isROIEnabledChanged            ();
     void initialConnectComplete         ();
     void sensorsParametersResetAck      (bool success);
-// 2022 730
+
+//以下是Vehicle 可以获取的
+// 2022730
 //无人机起飞信号
     void vehicleTakeOff();
 //无人机降落
     void vehicleLand();
-//无人机喷头喷雾状态
-    void vehicleSprayState(bool type);
+//无人机起飞时间
+    void vehicleFlightTime(QString time);
+//无人机喷头喷头状态是否打开
+    void vehicleSprayState(bool isOpen);
 //无人机UID
     void vehicleUid(QString uid);
 //无人机流速获取之后分为 小数整数 暂时未使用
-    void vehicleFlowRate(uint8_t flowrate);
+    void vehicleFlowRate(uint8_t flowRate);
 //无人机作业面积(注意要累加)
-    void vehicleWorkArea(double workarea);
+    void vehicleWorkArea(double workArea);
 //无人机经度
     void vehicleLongitude(double lot);
 //无人机维度
     void vehicleLatitude(double lat);
 //无人机高度飞行高度
-    void vehicleFlighTaltiTude(double flighttaltitude);
+    void vehicleFlighTaltiTude(double flightTaltiTude);
 //无人机飞行速度(地速)
-    void vehicleGroundSpeed(double GroundSpeed);
-
+    void vehicleGroundFlightSpeed(double groundSpeed);
+//202281
+//无人机数据发送时刻()//
+    void vehicleDataSendTime();
+//无人机液位计状态
+    void vehicleLevelGaugeStatus(bool gaugetype);
+//无人机飞行状态
+void vehicleFlightMode(QString flightmodetype);
 
 private slots:
     void _mavlinkMessageReceived            (LinkInterface* link, mavlink_message_t message);
