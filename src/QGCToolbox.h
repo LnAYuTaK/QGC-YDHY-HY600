@@ -34,6 +34,8 @@ class QGCCorePlugin;
 class SettingsManager;
 class AirspaceManager;
 class ADSBVehicleManager;
+//202282
+class DataManager;
 #if defined(QGC_ENABLE_PAIRING)
 class PairingManager;
 #endif
@@ -69,6 +71,9 @@ public:
     SettingsManager*            settingsManager         () { return _settingsManager; }
     AirspaceManager*            airspaceManager         () { return _airspaceManager; }
     ADSBVehicleManager*         adsbVehicleManager      () { return _adsbVehicleManager; }
+    //202282
+    DataManager *               dataManager             () { return _dataManager; }
+
 #if defined(QGC_ENABLE_PAIRING)
     PairingManager*             pairingManager          () { return _pairingManager; }
 #endif
@@ -81,6 +86,7 @@ public:
 #if defined(QGC_GST_MICROHARD_ENABLED)
     MicrohardManager*           microhardManager        () { return _microhardManager; }
 #endif
+
 
 private:
     void setChildToolboxes(void);
@@ -109,6 +115,8 @@ private:
     SettingsManager*            _settingsManager        = nullptr;
     AirspaceManager*            _airspaceManager        = nullptr;
     ADSBVehicleManager*         _adsbVehicleManager     = nullptr;
+    //202282
+    DataManager *               _dataManager            = nullptr;
 #if defined(QGC_ENABLE_PAIRING)
     PairingManager*             _pairingManager         = nullptr;
 #endif

@@ -965,8 +965,8 @@ signals:
     void vehicleFlightTime(QString time);
 //无人机喷头喷头状态是否打开
     void vehicleSprayState(bool isOpen);
-//无人机UID
-    void vehicleUid(QString uid);
+//无人机ID
+    void vehicleid(int id);
 //无人机流速获取之后分为 小数整数 暂时未使用
     void vehicleFlowRate(uint8_t flowRate);
 //无人机作业面积(注意要累加)
@@ -985,7 +985,7 @@ signals:
 //无人机液位计状态
     void vehicleLevelGaugeStatus(bool gaugetype);
 //无人机飞行状态
-void vehicleFlightMode(QString flightmodetype);
+    void vehicleFlightMode(QString flightmodetype);
 
 private slots:
     void _mavlinkMessageReceived            (LinkInterface* link, mavlink_message_t message);

@@ -141,7 +141,7 @@ void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicle
     _sendGCSHeartbeat();
 
     qgcApp()->toolbox()->settingsManager()->appSettings()->defaultFirmwareType()->setRawValue(vehicleFirmwareType);
-
+    //202282
     emit vehicleAdded(vehicle);
 
     if (_vehicles.count() > 1) {

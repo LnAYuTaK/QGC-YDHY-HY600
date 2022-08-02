@@ -611,13 +611,17 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         _maxProtoVersion = mavlinkVersion;
         qCDebug(VehicleLog) << "_mavlinkMessageReceived Link already running Mavlink v2. Setting _maxProtoVersion" << _maxProtoVersion;
     }
-
+    //202282
+    emit vehicleid(_id);
     if (message.sysid != _id && message.sysid != 0) {
         // We allow RADIO_STATUS messages which come from a link the vehicle is using to pass through and be handled
         if (!(message.msgid == MAVLINK_MSG_ID_RADIO_STATUS && _vehicleLinkManager->containsLink(link))) {
             return;
         }
     }
+
+
+
 
     // We give the link manager first whack since it it reponsible for adding new links
     _vehicleLinkManager->mavlinkMessageReceived(link, message);
@@ -1114,6 +1118,7 @@ void Vehicle::_handleGpsRawInt(mavlink_message_t& message)
     mavlink_msg_gps_raw_int_decode(&message, &gpsRawInt);
     //202281
     emit vehicleFlightTime(QString::number(gpsRawInt.time_usec));
+    emit vehicleDataSendTime();
     _gpsRawIntMessageAvailable = true;
 
     if (gpsRawInt.fix_type >= GPS_FIX_TYPE_3D_FIX) {
@@ -1280,7 +1285,7 @@ void Vehicle::_handleAltitude(mavlink_message_t& message)
     _altitudeRelativeFact.setRawValue(altitude.altitude_relative);
     _altitudeAMSLFact.setRawValue(altitude.altitude_amsl);
 }
-//根据处理喷雾头流速计参数
+//处理流速计
 void Vehicle::_handleFlowRatemeter(mavlink_message_t& message)
 {
     mavlink_servo_output_raw_t servooutputraw;
@@ -1355,8 +1360,7 @@ QString Vehicle::vehicleUIDStr()
             pUid[5] & 0xff,
             pUid[6] & 0xff,
             pUid[7] & 0xff);
-    //2022730
-    emit vehicleUid(uid);
+
     return uid;
 }
 
