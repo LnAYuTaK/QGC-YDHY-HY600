@@ -47,33 +47,33 @@ public:
       };
 //处理从Vehcile接收的数据
 public slots:
-  void _vehicleTakeOff();
+      void _vehicleTakeOff();
 
-  void _vehicleLand();
+      void _vehicleLand();
 
-  void _vehicleFlightTime(QString time);
+      void _vehicleFlightTime(QString time);
 
-  void _vehicleSprayState(bool isOpen);
+      void _vehicleSprayState(bool isOpen);
 
-  void _vehicleid(int id);
+      void _vehicleid(int id);
 
-  void _vehicleFlowRate(uint8_t flowRate);
+      void _vehicleFlowRate(uint8_t flowRate);
 
-  void _vehicleWorkArea(double workArea);
+      void _vehicleWorkArea(double workArea);
 
-  void _vehicleLongitude(double lot);
+      void _vehicleLongitude(double lot);
 
-  void _vehicleLatitude(double lat);
+      void _vehicleLatitude(double lat);
 
-  void _vehicleFlighTaltiTude(double flightTaltiTude);
+      void _vehicleFlighTaltiTude(double flightTaltiTude);
 
-  void _vehicleGroundFlightSpeed(double groundSpeed);
+      void _vehicleGroundFlightSpeed(double groundSpeed);
 
-  void _vehicleDataSendTime();
+      void _vehicleDataSendTime();
 
-  void _vehicleLevelGaugeStatus(bool gaugetype);
+      void _vehicleLevelGaugeStatus(bool gaugetype);
 
-  void _vehicleFlightMode(QString flightmodetype);
+      void _vehicleFlightMode(QString flightmodetype);
 
 private:
       static bool      _flightState;
@@ -96,11 +96,11 @@ private:
       const QString    _softWareVersion;
       const QString    _fireWareVersion;
 
-//Tools
-   QVector <qint64> splitDouble(double data,qint16 digit);
+      QVector <qint64> splitDouble(double data,qint16 digit);
 
-//发送到后台的数据包 每条消息位数固定（如有丢位可直接舍弃），字段在消息中位置固定，十六进制字符串
-   QVector <QByteArray> vehiclePack;
+      QVector <QByteArray> vehiclePack;
+
+
 };
 //初始化静态变量
 
