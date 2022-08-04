@@ -686,8 +686,6 @@ public:
     //202281 添加一个获取VehicleID的方法
     int  vehcileId(int vehicleId);
 
-
-
     static const int cMaxRcChannels = 18;
 
     /// Sends the specified MAV_CMD to the vehicle. If no Ack is received command will be retried. If a sendMavCommand is already in progress
@@ -986,7 +984,8 @@ signals:
     void vehicleLevelGaugeStatus(bool gaugetype);
 //无人机飞行状态
     void vehicleFlightMode(QString flightmodetype);
-
+//无人机的信息
+    void vehicleMsgText(QString msgtext);
 private slots:
     void _mavlinkMessageReceived            (LinkInterface* link, mavlink_message_t message);
     void _sendMessageMultipleNext           ();

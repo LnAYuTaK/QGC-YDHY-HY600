@@ -23,7 +23,7 @@ private:
     static NetLayer *m_layer;
     static QThread WorkThread;
     //创建网络任务
-    bool  createNetTask(QString taskName ,NetLayer *task);
+    bool createNetTask(QString taskName ,NetLayer *task);
     //执行网络任务
     void runNetTask(QString taskName);
     //线程qlist表存放线程句柄记住要结束销毁

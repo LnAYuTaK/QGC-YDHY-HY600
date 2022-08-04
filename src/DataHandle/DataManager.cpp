@@ -11,45 +11,58 @@ uint8_t   VehicleDataFactPack::_sprayStat        = 0;
 int       VehicleDataFactPack::_id               = 0;
 uint8_t   VehicleDataFactPack::_flowRate         = 0;
 double    VehicleDataFactPack::_workArea         = 0;
-double    VehicleDataFactPack::_lot              = 0;
+double    VehicleDataFactPack::_lot              = 0.0;
 double    VehicleDataFactPack::_lat              = 0;
 double    VehicleDataFactPack::_flightTailTude   = 0;
 double    VehicleDataFactPack::_groundSpeed      = 0;
 bool      VehicleDataFactPack::_upDataFlightFlag = false;
-bool      VehicleDataFactPack::_gaugetype        = false;
+uint8_t   VehicleDataFactPack::_gaugetype        = 1;
 QString   VehicleDataFactPack::_flightMode       = "";
-
+int vehicleIDID=0;
 VehicleDataFactPack::VehicleDataFactPack(QObject *parent)
     : QObject{parent}
 {
    //初始化vehiclePack方便赋值
     vehiclePack.append(packHead);       //帧头   0
-    vehiclePack.append(QByteArray(4,0));//计数器  1
-    vehiclePack.append(QByteArray(8,0));//起飞时间 2
-    vehiclePack.append(QByteArray(3,0));//无人机ID 3
-    vehiclePack.append(QByteArray(3,0));//用户ID  4
-    vehiclePack.append(QByteArray(1,0));//流速整数部分
-    vehiclePack.append(QByteArray(2,0));//流速小数部分
-    vehiclePack.append(QByteArray(2,0));//作业面积整数部分
-    vehiclePack.append(QByteArray(2,0));//作业面积小数部分
-    vehiclePack.append(QByteArray(1,0));//喷洒状态
-    vehiclePack.append(QByteArray(2,0));//经度整数
-    vehiclePack.append(QByteArray(6,0));//经度小数部分
-    vehiclePack.append(QByteArray(2,0));//维度整数部分
-    vehiclePack.append(QByteArray(6,0));//维度小数部分
-    vehiclePack.append(QByteArray(1,0));//高度正负
-    vehiclePack.append(QByteArray(3,0));//高度整数
-    vehiclePack.append(QByteArray(2,0));//高度小数
-    vehiclePack.append(QByteArray(2,0));//飞行地速整数
-    vehiclePack.append(QByteArray(2,0));//飞行地速小数
-    vehiclePack.append(QByteArray(4,0));//数据发送时间
-    vehiclePack.append(QByteArray(1,0));//液位计状态
-    vehiclePack.append(QByteArray(1,0));//飞行模式
-    vehiclePack.append(QByteArray(4,0));//校验
-
+    vehiclePack.append(QString(4,'0'));
+    vehiclePack.append(QString(8,'0'));//起飞时间 2
+    vehiclePack.append(QString(3,'0'));//无人机ID 3
+    vehiclePack.append(QString(3,'0'));//用户ID  4
+    vehiclePack.append(QString(1,'0'));//流速整数部分5
+    vehiclePack.append(QString(2,'0'));//流速小数部分6
+    vehiclePack.append(QString(2,'0'));//作业面积整数部分7
+    vehiclePack.append(QString(2,'0'));//作业面积小数部分8
+    vehiclePack.append(QString(1,'0'));//喷洒状态9
+    vehiclePack.append(QString(2,'0'));//经度整数10
+    vehiclePack.append(QString(6,'0'));//经度小数部分11
+    vehiclePack.append(QString(2,'0'));//维度整数部分12
+    vehiclePack.append(QString(6,'0'));//维度小数部分13
+    vehiclePack.append(QString(1,'0'));//高度正负14
+    vehiclePack.append(QString(3,'0'));//高度整数15
+    vehiclePack.append(QString(2,'0'));//高度小数16
+    vehiclePack.append(QString(2,'0'));//飞行地速整数17
+    vehiclePack.append(QString(2,'0'));//飞行地速小数18
+    vehiclePack.append(QString(4,'0'));//数据发送时间19
+    vehiclePack.append(QString(1,'0'));//液位计状态20
+    vehiclePack.append(QString(1,'0'));//飞行模式21
 }
 //202282
 //数据处理
+void VehicleDataFactPack::_vehicleDataSendNumChanged()
+{
+    static int dataSendTimes=0;
+    dataSendTimes++;
+    qDebug()<<dataSendTimes;
+}
+void VehicleDataFactPack::_vehicleMsgText(QString messageText)
+{
+    if(messageText== "No Load RTL")
+    {
+        _gaugetype  = 0;
+        vehiclePack[20] = QString("%1").arg(_gaugetype,1,16,QLatin1Char('0'));
+    }
+}
+
 void VehicleDataFactPack::_vehicleFlightTime(QString time)
 {
     if(!_upDataFlightFlag){
@@ -83,7 +96,7 @@ void VehicleDataFactPack::_vehicleSprayState(bool isOpen)
 void VehicleDataFactPack::_vehicleid(int id)
 {
     _id= id;
-//    vehiclePack[4] = QString("%1").arg(_id,3,16,QLatin1Char('0')).toLatin1();
+    vehiclePack[4] = QString("%1").arg(_id,3,16,QLatin1Char('0'));
 
 }
 //无人机流速获取之后分为 小数整数 暂时未使用
@@ -91,10 +104,9 @@ void VehicleDataFactPack::_vehicleFlowRate(uint8_t flowRate)
 {
     _flowRate = flowRate;
     QVector <qint64> temp = splitDouble(_flowRate,2);
-
-//    vehiclePack[5] = QString("%1").arg(temp[0],1,16,QLatin1Char('0')).toLatin1();
-//    vehiclePack[6] = QString("%1").arg(temp[1],2,16,QLatin1Char('0')).toLatin1();
-
+    qDebug () <<temp[1] <<temp [0] <<"TEMP";
+    vehiclePack[5] = QString("%1").arg(temp[0],1,16,QLatin1Char('0'));
+    vehiclePack[6] = QString("%1").arg(temp[1],2,16,QLatin1Char('0'));
 }
 //无人机作业面积(注意要累加
 void VehicleDataFactPack::_vehicleWorkArea(double workArea)
@@ -103,25 +115,25 @@ void VehicleDataFactPack::_vehicleWorkArea(double workArea)
     if(_sprayStat>0){
        _workArea += workArea;
     }
-    QVector <qint64> temp = splitDouble(_workArea,2);
-//    vehiclePack[7] = QString("%1").arg(temp[0],2,16,QLatin1Char('0')).toLatin1();
-//    vehiclePack[8] = QString("%1").arg(temp[1],2,16,QLatin1Char('0')).toLatin1();
+   QVector <qint64> temp = splitDouble(_workArea,2);
+   vehiclePack[7] = QString("%1").arg(temp[0],2,16,QLatin1Char('0'));
+   vehiclePack[8] = QString("%1").arg(temp[1],2,16,QLatin1Char('0'));
 }
 //无人机经度
 void VehicleDataFactPack::_vehicleLongitude(double lot)
 {
     _lot =lot;
-    QVector <qint64> temp = splitDouble(_lot,2);
-//    vehiclePack[10] = QString("%1").arg(temp[0],2,16,QLatin1Char('0')).toLatin1();
-//    vehiclePack[11] = QString("%1").arg(temp[1],6,16,QLatin1Char('0')).toLatin1();
+    QVector <qint64> temp = splitDouble(_lot,7);
+    vehiclePack[10] = QString("%1").arg(temp[0],2,16,QLatin1Char('0'));
+    vehiclePack[11] = QString("%1").arg(temp[1],6,16,QLatin1Char('0'));
 }
 //无人机维度
 void VehicleDataFactPack::_vehicleLatitude(double lat)
 {
     _lat =lat;
-    QVector <qint64> temp = splitDouble(_lot,2);
-//    vehiclePack[12] = QString("%1").arg(temp[0],2,16,QLatin1Char('0')).toLatin1();
-//    vehiclePack[13] = QString("%1").arg(temp[1],6,16,QLatin1Char('0')).toLatin1();
+    QVector <qint64> temp = splitDouble(_lat,7);
+    vehiclePack[12] = QString("%1").arg(temp[0],2,16,QLatin1Char('0'));
+    vehiclePack[13] = QString("%1").arg(temp[1],6,16,QLatin1Char('0'));
 }
 //无人机高度飞行高度
 void VehicleDataFactPack::_vehicleFlighTaltiTude(double flightTaltiTude)
@@ -129,32 +141,33 @@ void VehicleDataFactPack::_vehicleFlighTaltiTude(double flightTaltiTude)
     _flightTailTude = flightTaltiTude;
     if(_flightTailTude<0)
     {
-//       vehiclePack[14] =  QString("%1").arg(1,1,16,QLatin1Char('0')).toLatin1();
+       vehiclePack[14] =  QString("%1").arg(1,1,16,QLatin1Char('0'));
     }
     else{
-//       vehiclePack[14] =  QString("%1").arg(0,1,16,QLatin1Char('0')).toLatin1();
+     vehiclePack[14] =  QString("%1").arg(0,1,16,QLatin1Char('0'));
     }
     QVector <qint64> temp = splitDouble(qAbs(_flightTailTude),2);
- //   vehiclePack[15] = QString("%1").arg(temp[0],3,16,QLatin1Char('0')).toLatin1();
-  //  vehiclePack[16] = QString("%1").arg(temp[1],2,16,QLatin1Char('0')).toLatin1();
+    vehiclePack[15] = QString("%1").arg(temp[0],3,16,QLatin1Char('0'));
+    vehiclePack[16] = QString("%1").arg(temp[1],2,16,QLatin1Char('0'));
 }
 //无人机飞行速度(地速)
 void VehicleDataFactPack::_vehicleGroundFlightSpeed(double groundSpeed)
 {
     _groundSpeed = groundSpeed;
     QVector <qint64> temp =splitDouble(groundSpeed,2);
-  //  vehiclePack[17] = QString("%1").arg(temp[0],2,16,QLatin1Char('0')).toLatin1();
-  //  vehiclePack[18] = QString("%1").arg(temp[1],2,16,QLatin1Char('0')).toLatin1();
+    vehiclePack[17] = QString("%1").arg(temp[0],2,16,QLatin1Char('0'));
+    vehiclePack[18] = QString("%1").arg(temp[1],2,16,QLatin1Char('0'));
 }
-//无人机数据发送时刻()//暂时不用
+//无人机数据发送时刻()//暂时弃用
 void VehicleDataFactPack::_vehicleDataSendTime()
 {
 
+
 }
-//无人机液位计状态
-void VehicleDataFactPack::_vehicleLevelGaugeStatus(bool gaugetype)
+//无人机液位计状态//暂时弃用
+void VehicleDataFactPack::_vehicleLevelGaugeStatus(uint8_t gaugetype)
 {
-    _gaugetype = gaugetype;
+
 }
 //无人机飞行模式
 void VehicleDataFactPack::_vehicleFlightMode(QString flightmodetype)
@@ -162,18 +175,39 @@ void VehicleDataFactPack::_vehicleFlightMode(QString flightmodetype)
     _flightMode =flightmodetype;
     qint16 value  = FlightModeType.indexOf(_flightMode);
     if(value < 0 || value > 7){
-   //    vehiclePack[21] = QString("%1").arg(0,1,16,QLatin1Char('0')).toLatin1();
+      vehiclePack[21] = QString("%1").arg(0,1,16,QLatin1Char('0'));
+    }
+    else{
+      vehiclePack[21] = QString("%1").arg(1,1,16,QLatin1Char('0'));
     }
 }
 //返回临时QVector
 QVector <qint64> VehicleDataFactPack::splitDouble(double data,qint16 digit)
 {
+  QVector <qint64> temp ;
   QString data_str = QString::number(data,'f',digit).toUtf8();
   QStringList list = data_str.split(".");
-  QVector <qint64> temp ;
   for(int i =0; i<2 ;i++)
-      temp[i] = list[i].toInt();
+    temp.append(list[i].toInt());
   return temp;
+}
+//打包协议加校验
+QString VehicleDataFactPack::pack()
+{
+    QString  pack;
+    for(int i = 0;i<vehiclePack.size();++i)
+    {
+         pack +=vehiclePack[i];
+    }
+
+    QByteArray pack_array = pack.toLatin1();
+    long checksum = 0;
+    for(int i = 0; i < pack_array.size(); i++){
+
+        checksum+=pack_array[i];
+    }
+
+    return pack+checksum;
 }
 
 //DataManager Class
@@ -181,6 +215,8 @@ DataManager::DataManager(QGCApplication* app, QGCToolbox* toolbox)
     : QGCTool(app, toolbox)
 {
    dataFactMap = new QMap<int,VehicleDataFactPack *>;
+   dataSendTimer =new  QTimer();
+   dataSendTimer->setInterval(1000);
 }
 
 void DataManager::setToolbox(QGCToolbox *toolbox)
@@ -189,6 +225,7 @@ void DataManager::setToolbox(QGCToolbox *toolbox)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     connect(qgcApp()->toolbox()->multiVehicleManager(),&MultiVehicleManager::vehicleAdded, this,&DataManager::dataFactAdd);
     connect(qgcApp()->toolbox()->multiVehicleManager(),&MultiVehicleManager::vehicleRemoved, this,&DataManager::dataFactRemove);
+    connect(dataSendTimer,&QTimer::timeout,this,&DataManager::sendData);
 }
 
 VehicleDataFactPack* DataManager::createDataFact(Vehicle* vehicle)
@@ -206,6 +243,7 @@ void DataManager::dataFactAdd(Vehicle* vehicle)
    if(data!=nullptr){
        dataFactMap->insert(vehicle->id(),data);
        //这里绑定一下信号槽
+       vehicleIDID = vehicle->id();
        connect(vehicle,&Vehicle::vehicleTakeOff,data,&VehicleDataFactPack::_vehicleTakeOff);
        connect(vehicle,&Vehicle::vehicleLand,data,&VehicleDataFactPack::_vehicleLand);
        connect(vehicle,&Vehicle::vehicleFlightTime,data,&VehicleDataFactPack::_vehicleFlightTime);
@@ -218,9 +256,12 @@ void DataManager::dataFactAdd(Vehicle* vehicle)
        connect(vehicle,&Vehicle::vehicleFlighTaltiTude,data,&VehicleDataFactPack::_vehicleFlighTaltiTude);
        connect(vehicle,&Vehicle::vehicleGroundFlightSpeed,data,&VehicleDataFactPack::_vehicleGroundFlightSpeed);
        connect(vehicle,&Vehicle::vehicleDataSendTime,data,&VehicleDataFactPack::_vehicleDataSendTime);
-       connect(vehicle,&Vehicle::vehicleLevelGaugeStatus,data,&VehicleDataFactPack::_vehicleLevelGaugeStatus);
-       connect(vehicle,&Vehicle::vehicleFlightMode,data,&VehicleDataFactPack::_vehicleFlightMode);
+       connect(vehicle,&Vehicle::vehicleMsgText,data,&VehicleDataFactPack::_vehicleMsgText);
+       connect(vehicle,&Vehicle::vehicleFlightMode,data,&VehicleDataFactPack::_vehicleFlightMode);     
+       connect(this,&DataManager::sendDataNumAdd,data,&VehicleDataFactPack::_vehicleDataSendNumChanged);
+       dataSendTimer->start();
    }
+
 }
 
 void DataManager::dataFactRemove(Vehicle* vehicle)
@@ -229,11 +270,32 @@ void DataManager::dataFactRemove(Vehicle* vehicle)
     {
         if(dataFactMap->contains(vehicle->id()))
         {
+           dataSendTimer->stop();
            dataFactMap->value(vehicle->id())->deleteLater();
            dataFactMap->remove(vehicle->id());
         }
     }
 }
+
+void DataManager::sendData()
+{
+      mSocket.connectToHost("192.168.3.113",8900);
+      if(dataFactMap!=nullptr)
+      {
+         VehicleDataFactPack *pack = dataFactMap->value(vehicleIDID);
+         mSocket.write(pack->pack().toLocal8Bit());
+         emit sendDataNumAdd();
+         mSocket.close();
+      }
+}
+
+
+
+
+
+
+
+
 
 
 

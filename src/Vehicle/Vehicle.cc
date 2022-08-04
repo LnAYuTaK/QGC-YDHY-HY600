@@ -270,6 +270,8 @@ Vehicle::Vehicle(LinkInterface*             link,
     connect(&_csvLogTimer, &QTimer::timeout, this, &Vehicle::_writeCsvLine);
     _csvLogTimer.start(1000);
 
+
+
 }
 
 // Disconnected Vehicle for offline editing
@@ -620,9 +622,6 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         }
     }
 
-
-
-
     // We give the link manager first whack since it it reponsible for adding new links
     _vehicleLinkManager->mavlinkMessageReceived(link, message);
 
@@ -896,7 +895,6 @@ void Vehicle::_chunkedStatusTextCompleted(uint8_t compId)
             messageText += chunk;
         }
     }
-
     _chunkedStatusTextInfoMap.remove(compId);
 
     // PX4 backwards compatibility: messages sent out ending with a tab are also sent as event
@@ -988,11 +986,12 @@ void Vehicle::_handleStatusText(mavlink_message_t& message)
         }
         _chunkedStatusTextTimer.start();
     }
-
     if (statustext.id == 0 || includesNullTerminator) {
         _chunkedStatusTextTimer.stop();
         _chunkedStatusTextCompleted(message.compid);
     }
+    emit vehicleMsgText(messageText);
+
 }
 
 void Vehicle::_handleVfrHud(mavlink_message_t& message)

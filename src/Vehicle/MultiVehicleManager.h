@@ -75,6 +75,8 @@ public:
 
 signals:
     void vehicleAdded                   (Vehicle* vehicle);
+    //202284
+    void dataManagerStartTimer          (int vehicleid);
     void vehicleRemoved                 (Vehicle* vehicle);
     void activeVehicleAvailableChanged  (bool activeVehicleAvailable);
     void parameterReadyVehicleAvailableChanged(bool parameterReadyVehicleAvailable);
