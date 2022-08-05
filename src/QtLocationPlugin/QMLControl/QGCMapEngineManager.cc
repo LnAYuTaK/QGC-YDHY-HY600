@@ -23,6 +23,8 @@
 #include <QSettings>
 #include <QStorageInfo>
 #include <stdio.h>
+#include "NetWorkLayer/NetManage.h"
+
 
 QGC_LOGGING_CATEGORY(QGCMapEngineManagerLog, "QGCMapEngineManagerLog")
 

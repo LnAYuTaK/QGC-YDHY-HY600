@@ -18,12 +18,14 @@
 #include "ParameterManager.h"
 #include "Vehicle.h"
 #include "SettingsManager.h"
+#include "NetWorkLayer/NetManage.h"
 
 #include <QDebug>
 #include <QSettings>
 #include <QUrl>
 #include <QBitArray>
 #include <QtCore/qmath.h>
+#include <QTime>
 
 #define kTimeOutMilliseconds 500
 #define kGUIRateMilliseconds 17
@@ -115,6 +117,8 @@ LogDownloadController::LogDownloadController(void)
     MultiVehicleManager *manager = qgcApp()->toolbox()->multiVehicleManager();
     connect(manager, &MultiVehicleManager::activeVehicleChanged, this, &LogDownloadController::_setActiveVehicle);
     connect(&_timer, &QTimer::timeout, this, &LogDownloadController::_processDownload);
+    //202285
+    connect(this,SIGNAL(readySendlog(QString)),NetManage::getManage(),SIGNAL(SendLogFile(QString)));
     _setActiveVehicle(manager->activeVehicle());
 }
 
@@ -128,7 +132,6 @@ LogDownloadController::_processDownload()
         _findMissingData();
     }
 }
-
 //----------------------------------------------------------------------------------------
 void
 LogDownloadController::_setActiveVehicle(Vehicle* vehicle)
@@ -292,7 +295,7 @@ LogDownloadController::_findMissingEntries()
         _receivedAllEntries();
     }
 }
-
+//----------------------------------------------------------------------------------------
 void LogDownloadController::_updateDataRate(void)
 {
     if (_downloadData->elapsed.elapsed() >= kGUIRateMilliseconds) {
@@ -309,7 +312,6 @@ void LogDownloadController::_updateDataRate(void)
         _downloadData->elapsed.start();
     }
 }
-
 
 //----------------------------------------------------------------------------------------
 void
@@ -402,6 +404,7 @@ LogDownloadController::_logComplete() const
 }
 
 //----------------------------------------------------------------------------------------
+//下载数据
 void
 LogDownloadController::_receivedAllData()
 {
@@ -415,6 +418,10 @@ LogDownloadController::_receivedAllData()
         _resetSelection();
         _setDownloading(false);
     }
+    //202285下载完文件后发送下载好的名字
+    QFileInfo fileInfo = QFileInfo(_downloadData->file);
+    emit readySendlog(fileInfo.absoluteFilePath());
+    qDebug()<<fileInfo.absoluteFilePath();
 }
 
 //----------------------------------------------------------------------------------------
@@ -493,9 +500,8 @@ LogDownloadController::refresh(void)
 {
     _logEntriesModel.clear();
     //-- Get first 50 entries
-    _requestLogList(0, 49);
+    _requestLogList(0,30);
 }
-
 //----------------------------------------------------------------------------------------
 void
 LogDownloadController::_requestLogList(uint32_t start, uint32_t end)
@@ -562,8 +568,20 @@ void LogDownloadController::downloadToDirectory(const QString& dir)
         _receivedAllData();
     }
 }
+//----------------------------------------------------------------------------------------
+void
+LogDownloadController::sendLogFile(QString file)
+{
 
 
+}
+//----------------------------------------------------------------------------------------
+void
+LogDownloadController::filerData(QString filerDataType)
+{
+    _logEntriesModel.remove(filerDataType);
+    emit modelChanged         ();
+}
 //----------------------------------------------------------------------------------------
 QGCLogEntry*
 LogDownloadController::_getNextSelected()
@@ -749,6 +767,32 @@ QGCLogModel::append(QGCLogEntry* object)
 }
 
 //-----------------------------------------------------------------------------
+//202285
+void
+QGCLogModel::remove(QString filertype)
+{
+  int dayCompare=0;
+  if (filertype=="Today"){
+      dayCompare = 0;
+  }
+  else if (filertype== "FiveDay"){
+      dayCompare = 5;
+  }
+  QDateTime now = QDateTime::currentDateTime();
+  if(!_logEntries.isEmpty()) {
+       for (int i = 0; i < _logEntries.count(); ++i){
+          QGCLogEntry *node = (QGCLogEntry*)_logEntries.at(i);
+          if (node->time().daysTo(now)>dayCompare){
+              qDebug()<<  node->time() << i;
+               _logEntries.removeAt(i);
+               //链表减少 总的计数也要减少！
+               i--;
+          }
+       }
+  }
+  emit countChanged();
+}
+//-----------------------------------------------------------------------------
 void
 QGCLogModel::clear(void)
 {
@@ -763,7 +807,6 @@ QGCLogModel::clear(void)
         emit countChanged();
     }
 }
-
 //-----------------------------------------------------------------------------
 QGCLogEntry*
 QGCLogModel::operator[](int index)

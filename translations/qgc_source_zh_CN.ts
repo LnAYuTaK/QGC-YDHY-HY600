@@ -9472,19 +9472,19 @@ Click Ok to start the auto-tuning process.
       <location filename="../src/ui/MainRootWindow.qml" line="156"/>
       <location filename="../src/ui/MainRootWindow.qml" line="385"/>
       <source>Analyze Tools</source>
-      <translation type="unfinished">Analyze Tools</translation>
+      <translation type="无人机设置">Analyze Tools</translation>
     </message>
     <message>
       <location filename="../src/ui/MainRootWindow.qml" line="160"/>
       <location filename="../src/ui/MainRootWindow.qml" line="370"/>
       <source>Vehicle Setup</source>
-      <translation type="unfinished">Vehicle Setup</translation>
+      <translation type="分析工具">Vehicle Setup</translation>
     </message>
     <message>
       <location filename="../src/ui/MainRootWindow.qml" line="164"/>
       <location filename="../src/ui/MainRootWindow.qml" line="401"/>
       <source>Application Settings</source>
-      <translation type="unfinished">Application Settings</translation>
+      <translation type="系统设置">Application Settings</translation>
     </message>
     <message>
       <location filename="../src/ui/MainRootWindow.qml" line="288"/>

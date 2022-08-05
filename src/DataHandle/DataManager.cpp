@@ -52,7 +52,6 @@ void VehicleDataFactPack::_vehicleDataSendNumChanged()
 {
     static int dataSendTimes=0;
     dataSendTimes++;
-    qDebug()<<dataSendTimes;
 }
 void VehicleDataFactPack::_vehicleMsgText(QString messageText)
 {
@@ -162,7 +161,6 @@ void VehicleDataFactPack::_vehicleGroundFlightSpeed(double groundSpeed)
 void VehicleDataFactPack::_vehicleDataSendTime()
 {
 
-
 }
 //无人机液位计状态//暂时弃用
 void VehicleDataFactPack::_vehicleLevelGaugeStatus(uint8_t gaugetype)
@@ -191,7 +189,7 @@ QVector <qint64> VehicleDataFactPack::splitDouble(double data,qint16 digit)
     temp.append(list[i].toInt());
   return temp;
 }
-//打包协议加校验
+//打包数据并加上校验
 QString VehicleDataFactPack::pack()
 {
     QString  pack;
@@ -201,13 +199,13 @@ QString VehicleDataFactPack::pack()
     }
 
     QByteArray pack_array = pack.toLatin1();
-    long checksum = 0;
+    long checksumtemp = 0;
     for(int i = 0; i < pack_array.size(); i++){
 
-        checksum+=pack_array[i];
+        checksumtemp +=pack_array[i];
     }
-
-    return pack+checksum;
+    QString checkSum   = QString("%1").arg(checksumtemp,4,16,QLatin1Char('0'));
+    return pack+checkSum;
 }
 
 //DataManager Class
@@ -226,6 +224,7 @@ void DataManager::setToolbox(QGCToolbox *toolbox)
     connect(qgcApp()->toolbox()->multiVehicleManager(),&MultiVehicleManager::vehicleAdded, this,&DataManager::dataFactAdd);
     connect(qgcApp()->toolbox()->multiVehicleManager(),&MultiVehicleManager::vehicleRemoved, this,&DataManager::dataFactRemove);
     connect(dataSendTimer,&QTimer::timeout,this,&DataManager::sendData);
+    connect(dataSendTimer,&QTimer::timeout,this,&DataManager::saveDataLocal);
 }
 
 VehicleDataFactPack* DataManager::createDataFact(Vehicle* vehicle)
@@ -277,6 +276,8 @@ void DataManager::dataFactRemove(Vehicle* vehicle)
     }
 }
 
+
+
 void DataManager::sendData()
 {
       mSocket.connectToHost("192.168.3.113",8900);
@@ -287,6 +288,33 @@ void DataManager::sendData()
          emit sendDataNumAdd();
          mSocket.close();
       }
+}
+
+void DataManager::saveDataLocal()
+{
+   VehicleDataFactPack *pack = dataFactMap->value(vehicleIDID);
+   QString min = QDateTime::currentDateTime().toString("yyyyMMdd");
+   QString timestr = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+#if !defined(__android__)
+   QString dir_path =  "../DATA_SAVE";
+#else
+   QString dir_path =  "/storage/emulated/0/DATA_SAVE";
+#endif
+   QDir dir;
+   if(!dir.exists(dir_path)){
+       dir.mkdir(dir_path);
+       qDebug() << "Create Dir";
+   }
+   QString save_filename = dir_path + "/" + min + ".txt";
+   QFile f(save_filename);
+   QTextStream in(&f);
+   if(!f.open( QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)){
+       qDebug()<<"Write Error";
+       return;
+   }
+   in <<pack->pack().toLocal8Bit();
+   f.flush();
+   f.close();
 }
 
 

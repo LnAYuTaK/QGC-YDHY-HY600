@@ -21,6 +21,7 @@
 
 #include "UASInterface.h"
 #include "AutoPilotPlugin.h"
+#include "NetWorkLayer/NetManage.h"
 
 class  MultiVehicleManager;
 class  UASInterface;
@@ -49,6 +50,8 @@ public:
     void        append          (QGCLogEntry* entry);
     void        clear           (void);
     QGCLogEntry*operator[]      (int i);
+    //202285
+    void        remove          (QString filertype);
 
     int         rowCount        (const QModelIndex & parent = QModelIndex()) const;
     QVariant    data            (const QModelIndex & index, int role = Qt::DisplayRole) const;
@@ -128,6 +131,9 @@ public:
     Q_INVOKABLE void download               (QString path = QString());
     Q_INVOKABLE void eraseAll               ();
     Q_INVOKABLE void cancel                 ();
+    //202282
+    Q_INVOKABLE void filerData              (QString filerDataTyoe);
+    Q_INVOKABLE void sendLogFile            (QString path);
 
     void downloadToDirectory(const QString& dir);
 
@@ -136,6 +142,7 @@ signals:
     void downloadingLogsChanged ();
     void modelChanged           ();
     void selectionChanged       ();
+    void readySendlog           (QString filename);
 
 private slots:
     void _setActiveVehicle  (Vehicle* vehicle);
@@ -171,6 +178,11 @@ private:
     int                 _retries;
     int                 _apmOneBased;
     QString             _downloadPath;
+
+
+
+
+
 };
 
 #endif

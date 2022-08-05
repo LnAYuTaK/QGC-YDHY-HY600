@@ -18,6 +18,10 @@ import QGroundControl.Controls      1.0
 import QGroundControl.Controllers   1.0
 import QGroundControl.ScreenTools   1.0
 
+
+//具体实现
+//LogDownloadCotroller.cc
+//QGCFileDialogController.cc
 AnalyzePage {
     id:                 logDownloadPage
     pageComponent:      pageComponent
@@ -57,7 +61,7 @@ AnalyzePage {
 
                 TableViewColumn {
                     title: qsTr("Id")
-                    width: ScreenTools.defaultFontPixelWidth * 6
+                    width: ScreenTools.defaultFontPixelWidth * 4
                     horizontalAlignment: Text.AlignHCenter
                     delegate : Text  {
                         horizontalAlignment: Text.AlignHCenter
@@ -70,7 +74,7 @@ AnalyzePage {
 
                 TableViewColumn {
                     title: qsTr("Date")
-                    width: ScreenTools.defaultFontPixelWidth * 34
+                    width: ScreenTools.defaultFontPixelWidth * 20
                     horizontalAlignment: Text.AlignHCenter
                     delegate: Text  {
                         text: {
@@ -92,7 +96,7 @@ AnalyzePage {
 
                 TableViewColumn {
                     title: qsTr("Size")
-                    width: ScreenTools.defaultFontPixelWidth * 18
+                    width: ScreenTools.defaultFontPixelWidth * 15
                     horizontalAlignment: Text.AlignHCenter
                     delegate : Text  {
                         horizontalAlignment: Text.AlignRight
@@ -105,7 +109,7 @@ AnalyzePage {
 
                 TableViewColumn {
                     title: qsTr("Status")
-                    width: ScreenTools.defaultFontPixelWidth * 22
+                    width: ScreenTools.defaultFontPixelWidth * 20
                     horizontalAlignment: Text.AlignHCenter
                     delegate : Text  {
                         horizontalAlignment: Text.AlignHCenter
@@ -116,6 +120,9 @@ AnalyzePage {
                     }
                 }
             }
+
+
+
             Column {
                 spacing:            _margin
                 Layout.alignment:   Qt.AlignTop | Qt.AlignLeft
@@ -157,6 +164,7 @@ AnalyzePage {
                             fileDialog.openForLoad()
                         }
                     }
+
                     QGCFileDialog {
                         id: fileDialog
                         onAcceptedForLoad: {
@@ -165,6 +173,51 @@ AnalyzePage {
                         }
                     }
                 }
+               QGCButton {
+                    enabled:    !logController.requestingList && !logController.downloadingLogs && logController.model.count > 0
+                    text:       qsTr("筛选")
+                    width:      _butttonWidth
+                    //筛选日期
+                    onClicked:{
+                        dateDialog.visible =  true
+                    }
+                    Dialog {
+                        id: dateDialog
+                        visible: false
+                        title: "Choose a date"
+                        width:ScreenTools.defaultFontPixelWidth * 20
+                        height: ScreenTools.defaultFontPixelWidth * 20
+                     Row {
+                        spacing: 10
+                        Button{
+                            text:"今天"
+                            onClicked:{
+                               logController.filerData("Today")
+                            }
+                        }
+                        Button{
+                            text: "五天内"
+                            onClicked:{
+                               logController.filerData("FiveDay")
+                            }
+                          }
+                        }
+                    }
+
+                }
+
+
+                QGCButton{
+                    enabled:    !logController.requestingList && !logController.downloadingLogs && logController.model.count > 0
+                    text:       qsTr("发送日志")
+                    width:      _butttonWidth
+                    onClicked:{
+
+                    }
+
+
+                }
+
                 QGCButton {
                     enabled:    !logController.requestingList && !logController.downloadingLogs && logController.model.count > 0
                     text:       qsTr("Erase All")

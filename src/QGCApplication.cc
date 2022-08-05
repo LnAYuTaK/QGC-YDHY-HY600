@@ -878,7 +878,6 @@ bool QGCApplication::_parseVersionText(const QString& versionString, int& majorV
     return false;
 }
 
-
 void QGCApplication::_onGPSConnect()
 {
     _gpsRtkFactGroup->connected()->setRawValue(true);

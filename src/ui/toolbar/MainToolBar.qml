@@ -67,7 +67,7 @@ Rectangle {
         QGCToolBarButton {
             id:                     currentButton
             Layout.preferredHeight: viewButtonRow.height
-            icon.source:            "/res/QGCLogoFull"
+            icon.source:           "/res/resources/WindowsYDHY.svg"
             logo:                   true
             onClicked:              mainWindow.showToolSelectDialog()
         }
@@ -76,15 +76,13 @@ Rectangle {
             Layout.preferredHeight: viewButtonRow.height
             visible:                currentToolbar === flyViewToolbar
         }
-
         QGCButton {
             id:                 disconnectButton
-            text:               qsTr("Disconnect")
+            text:               qsTr("连接")
             onClicked:          _activeVehicle.closeVehicle()
             visible:            _activeVehicle && _communicationLost && currentToolbar === flyViewToolbar
         }
     }
-
     QGCFlickable {
         id:                     toolsFlickable
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5

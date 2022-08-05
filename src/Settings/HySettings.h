@@ -19,9 +19,6 @@ class HySettings : public QObject
 public:
    static HySettings* getSettings();
 
-
-
-
    //Config filename
    static const char *NetWorkConfigFile;
    static const char *UserConfigFile;

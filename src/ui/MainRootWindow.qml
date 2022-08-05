@@ -22,6 +22,7 @@ import QGroundControl.FlightMap     1.0
 
 /// @brief Native QML top level window
 /// All properties defined here are visible to all QML pages.
+//202285修改位置
 ApplicationWindow {
     id:             mainWindow
     minimumWidth:   ScreenTools.isMobile ? Screen.width  : Math.min(ScreenTools.defaultFontPixelWidth * 100, Screen.width)
@@ -367,7 +368,7 @@ ApplicationWindow {
                         id:                 setupButton
                         height:             _toolButtonHeight
                         Layout.fillWidth:   true
-                        text:               qsTr("Vehicle Setup")
+                        text:               qsTr("无人机设置")
                         imageColor:         qgcPal.text
                         imageResource:      "/qmlimages/Gears.svg"
                         onClicked: {
@@ -382,7 +383,7 @@ ApplicationWindow {
                         id:                 analyzeButton
                         height:             _toolButtonHeight
                         Layout.fillWidth:   true
-                        text:               qsTr("Analyze Tools")
+                        text:               qsTr("分析工具")
                         imageResource:      "/qmlimages/Analyze.svg"
                         imageColor:         qgcPal.text
                         visible:            QGroundControl.corePlugin.showAdvancedUI
@@ -398,8 +399,8 @@ ApplicationWindow {
                         id:                 settingsButton
                         height:             _toolButtonHeight
                         Layout.fillWidth:   true
-                        text:               qsTr("Application Settings")
-                        imageResource:      "/res/QGCLogoFull"
+                        text:               qsTr("应用设置")
+                        imageResource:      "/res/resources/WindowsYDHY.svg"
                         imageColor:         "transparent"
                         visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
                         onClicked: {

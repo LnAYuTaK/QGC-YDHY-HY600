@@ -15,6 +15,7 @@
 #include "Vehicle.h"
 #include  "Settings/HySettings.h"
 
+
 #define   PACKHEAD  "EB90"
 //植保机DataFact
 class  VehicleDataFactPack:public QObject
@@ -83,6 +84,7 @@ public slots:
       void _vehicleDataSendNumChanged();
 
 
+
 private:
       static bool      _flightState;
       static QString   _flightTime;
@@ -121,6 +123,8 @@ public:
      virtual void setToolbox(QGCToolbox* toolbox)final;
      //send netdata
      void  sendData();
+     void  saveDataLocal();
+
 private:
     VehicleDataFactPack* createDataFact(Vehicle* vehicle);
     //
@@ -133,6 +137,10 @@ private:
     //Test 定时器连接活跃的Vehicle
     QTimer  *dataSendTimer;
     QTcpSocket mSocket;
+
+
+
+
 protected:
     QGCApplication* _app;
     QGCToolbox*     _toolbox;

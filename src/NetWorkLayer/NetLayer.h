@@ -28,7 +28,6 @@ private:
 public slots:
     //Task
     void SendBinLogFile(QString);
-
     //Task
     //void SendData();
 signals:
