@@ -133,6 +133,7 @@ public:
     Q_INVOKABLE void cancel                 ();
     //202282
     Q_INVOKABLE void filerData              (QString filerDataTyoe);
+    Q_INVOKABLE void sendLogFile            (QString path);
 
     void downloadToDirectory(const QString& dir);
 
@@ -141,8 +142,7 @@ signals:
     void downloadingLogsChanged ();
     void modelChanged           ();
     void selectionChanged       ();
-    //202288 œ¬‘ÿÕÍ≥…
-    void downloadcomplete       (QString filename);
+    void readySendlog           (QString filename);
 
 private slots:
     void _setActiveVehicle  (Vehicle* vehicle);
@@ -178,7 +178,6 @@ private:
     int                 _retries;
     int                 _apmOneBased;
     QString             _downloadPath;
-
 
 
 

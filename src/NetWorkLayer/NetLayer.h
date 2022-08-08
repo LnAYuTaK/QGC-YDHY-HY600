@@ -26,10 +26,14 @@ public:
 private:
 
 public slots:
+
     //Task
     void SendBinLogFile(QString);
     //Task
     //void SendData();
+private slots:
+
+
 signals:
     void LogSendSuccess();
     void LogSendFail();

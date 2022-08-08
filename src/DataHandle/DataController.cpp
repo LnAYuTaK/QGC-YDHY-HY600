@@ -1,4 +1,4 @@
-#include "DataManager.h"
+#include "DataController.h"
 //初始化 VehicleDataFactPack
 
 
@@ -208,26 +208,19 @@ QString VehicleDataFactPack::pack()
     return pack+checkSum;
 }
 
-//DataManager Class
-DataManager::DataManager(QGCApplication* app, QGCToolbox* toolbox)
-    : QGCTool(app, toolbox)
+DataController::DataController()
 {
    dataFactMap = new QMap<int,VehicleDataFactPack *>;
    dataSendTimer =new  QTimer();
+   QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+   connect(qgcApp()->toolbox()->multiVehicleManager(),&MultiVehicleManager::vehicleAdded, this,&DataController::dataFactAdd);
+   connect(qgcApp()->toolbox()->multiVehicleManager(),&MultiVehicleManager::vehicleRemoved, this,&DataController::dataFactRemove);
+   connect(dataSendTimer,&QTimer::timeout,this,&DataController::sendData);
+   connect(dataSendTimer,&QTimer::timeout,this,&DataController::saveDataLocal);
    dataSendTimer->setInterval(1000);
 }
 
-void DataManager::setToolbox(QGCToolbox *toolbox)
-{
-    QGCTool::setToolbox(toolbox);
-    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-    connect(qgcApp()->toolbox()->multiVehicleManager(),&MultiVehicleManager::vehicleAdded, this,&DataManager::dataFactAdd);
-    connect(qgcApp()->toolbox()->multiVehicleManager(),&MultiVehicleManager::vehicleRemoved, this,&DataManager::dataFactRemove);
-    connect(dataSendTimer,&QTimer::timeout,this,&DataManager::sendData);
-    connect(dataSendTimer,&QTimer::timeout,this,&DataManager::saveDataLocal);
-}
-
-VehicleDataFactPack* DataManager::createDataFact(Vehicle* vehicle)
+VehicleDataFactPack* DataController::createDataFact(Vehicle* vehicle)
 {
   if(vehicle!=nullptr){
     VehicleDataFactPack * data = new VehicleDataFactPack();
@@ -236,12 +229,12 @@ VehicleDataFactPack* DataManager::createDataFact(Vehicle* vehicle)
    return nullptr;
 }
 //这里比较繁琐后面改成函数模板//
-void DataManager::dataFactAdd(Vehicle* vehicle)
+void DataController::dataFactAdd(Vehicle* vehicle)
 {
    VehicleDataFactPack * data  =this->createDataFact(vehicle);
    if(data!=nullptr){
        dataFactMap->insert(vehicle->id(),data);
-       //这里绑定一下信号槽
+       //一个Vehicle 对应一个datafact的先测试这么用
        vehicleIDID = vehicle->id();
        connect(vehicle,&Vehicle::vehicleTakeOff,data,&VehicleDataFactPack::_vehicleTakeOff);
        connect(vehicle,&Vehicle::vehicleLand,data,&VehicleDataFactPack::_vehicleLand);
@@ -257,13 +250,13 @@ void DataManager::dataFactAdd(Vehicle* vehicle)
        connect(vehicle,&Vehicle::vehicleDataSendTime,data,&VehicleDataFactPack::_vehicleDataSendTime);
        connect(vehicle,&Vehicle::vehicleMsgText,data,&VehicleDataFactPack::_vehicleMsgText);
        connect(vehicle,&Vehicle::vehicleFlightMode,data,&VehicleDataFactPack::_vehicleFlightMode);     
-       connect(this,&DataManager::sendDataNumAdd,data,&VehicleDataFactPack::_vehicleDataSendNumChanged);
+       connect(this,&DataController::sendDataNumAdd,data,&VehicleDataFactPack::_vehicleDataSendNumChanged);
        dataSendTimer->start();
    }
 
 }
 
-void DataManager::dataFactRemove(Vehicle* vehicle)
+void DataController::dataFactRemove(Vehicle* vehicle)
 {
     if(vehicle!=nullptr||(!dataFactMap->isEmpty()))
     {
@@ -277,8 +270,8 @@ void DataManager::dataFactRemove(Vehicle* vehicle)
 }
 
 
-
-void DataManager::sendData()
+//测试
+void DataController::sendData()
 {
       mSocket.connectToHost("192.168.3.113",8900);
       if(dataFactMap!=nullptr)
@@ -290,7 +283,9 @@ void DataManager::sendData()
       }
 }
 
-void DataManager::saveDataLocal()
+//TODU
+//这里是存储到本地 根据AppSetting 的文件夹存放
+void DataController::saveDataLocal()
 {
    VehicleDataFactPack *pack = dataFactMap->value(vehicleIDID);
    QString min = QDateTime::currentDateTime().toString("yyyyMMdd");

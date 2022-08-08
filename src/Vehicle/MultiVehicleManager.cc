@@ -143,7 +143,6 @@ void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicle
     qgcApp()->toolbox()->settingsManager()->appSettings()->defaultFirmwareType()->setRawValue(vehicleFirmwareType);
     //202282
     emit vehicleAdded(vehicle);
-    emit dataManagerStartTimer(vehicle->id());
 
     if (_vehicles.count() > 1) {
         qgcApp()->showAppMessage(tr("Connected to Vehicle %1").arg(vehicleId));

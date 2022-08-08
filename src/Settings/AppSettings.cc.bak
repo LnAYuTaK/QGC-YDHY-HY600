@@ -34,6 +34,10 @@ const char* AppSettings::logDirectory =             QT_TRANSLATE_NOOP("AppSettin
 const char* AppSettings::videoDirectory =           QT_TRANSLATE_NOOP("AppSettings", "Video");
 const char* AppSettings::photoDirectory =           QT_TRANSLATE_NOOP("AppSettings", "Photo");
 const char* AppSettings::crashDirectory =           QT_TRANSLATE_NOOP("AppSettings", "CrashLogs");
+//2022729
+const char* AppSettings::settingDirectory =         QT_TRANSLATE_NOOP("AppSettings", "Setting");
+const char* AppSettings::userDirectory =            QT_TRANSLATE_NOOP("AppSettings", "User");
+
 
 // Release languages are 90%+ complete
 QList<int> AppSettings::_rgReleaseLanguages = {
@@ -79,15 +83,14 @@ DECLARE_SETTINGGROUP(App, "")
     // Instantiate savePath so we can check for override and setup default path if needed
 
     SettingsFact* savePathFact = qobject_cast<SettingsFact*>(savePath());
-    QString appName = qgcApp()->applicationName();
+    QString appName = "YDHY";
 #ifdef __mobile__
     // Mobile builds always use the runtime generated location for savePath.
     bool userHasModifiedSavePath = false;
 #else
     bool userHasModifiedSavePath = !savePathFact->rawValue().toString().isEmpty() || !_nameToMetaDataMap[savePathName]->rawDefaultValue().toString().isEmpty();
 #endif
-
-    if (!userHasModifiedSavePath) {
+    if (userHasModifiedSavePath) {
 #ifdef __mobile__
     #ifdef __ios__
         // This will expose the directories directly to the File iOs app
@@ -218,6 +221,8 @@ void AppSettings::_checkSavePathDirectories(void)
         savePathDir.mkdir(videoDirectory);
         savePathDir.mkdir(photoDirectory);
         savePathDir.mkdir(crashDirectory);
+        savePathDir.mkdir(settingDirectory);
+        savePathDir.mkdir(userDirectory);
     }
 }
 
@@ -292,6 +297,26 @@ QString AppSettings::crashSavePath(void)
     if (!path.isEmpty() && QDir(path).exists()) {
         QDir dir(path);
         return dir.filePath(crashDirectory);
+    }
+    return QString();
+}
+//2022729
+QString AppSettings::settingSavePath(void)
+{
+    QString path = savePath()->rawValue().toString();
+    if (!path.isEmpty() && QDir(path).exists()) {
+        QDir dir(path);
+        return dir.filePath(settingDirectory);
+    }
+    return QString();
+}
+
+QString AppSettings::userSavePath(void)
+{
+    QString path = savePath()->rawValue().toString();
+    if (!path.isEmpty() && QDir(path).exists()) {
+        QDir dir(path);
+        return dir.filePath(userDirectory);
     }
     return QString();
 }

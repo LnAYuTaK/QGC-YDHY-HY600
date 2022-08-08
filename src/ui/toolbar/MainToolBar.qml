@@ -19,6 +19,8 @@ import QGroundControl.MultiVehicleManager   1.0
 import QGroundControl.ScreenTools           1.0
 import QGroundControl.Controllers           1.0
 
+
+//上方工具栏
 Rectangle {
     id:     _root
     color:  qgcPal.toolbarBackground
@@ -80,6 +82,7 @@ Rectangle {
             id:                 disconnectButton
             text:               qsTr("连接")
             onClicked:          _activeVehicle.closeVehicle()
+
             visible:            _activeVehicle && _communicationLost && currentToolbar === flyViewToolbar
         }
     }

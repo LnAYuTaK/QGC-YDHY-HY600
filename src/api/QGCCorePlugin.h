@@ -13,7 +13,7 @@
 #include "QGCPalette.h"
 #include "QGCMAVLink.h"
 #include "QmlObjectListModel.h"
-#include "NetWorkLayer/NetManage.h"
+#include "NetWorkLayer/NetWorkManager.h"
 
 #include <QObject>
 #include <QVariantList>

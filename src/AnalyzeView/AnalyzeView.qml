@@ -125,7 +125,6 @@ Rectangle {
         source:                 "LogDownloadPage.qml"
 
         property string title
-
         Connections {
             target: panelLoader.item
             onPopout: {
@@ -158,7 +157,6 @@ Rectangle {
                     onLoaded:       item.popped = true
                 }
             }
-
             onClosing: {
                 visible = false
                 source = ""

@@ -17,6 +17,7 @@ import QGroundControl.Palette       1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.Controllers   1.0
 import QGroundControl.ScreenTools   1.0
+import QGroundControl.NetWorkManager 1.0
 
 
 //具体实现
@@ -168,7 +169,7 @@ AnalyzePage {
                     QGCFileDialog {
                         id: fileDialog
                         onAcceptedForLoad: {
-                            logController.download(file)
+                            logController.download(QGroundControl.settingsManager.appSettings.logSavePath)
                             close()
                         }
                     }
@@ -205,19 +206,29 @@ AnalyzePage {
                     }
 
                 }
-
-
-                QGCButton{
+               QGCButton {
                     enabled:    !logController.requestingList && !logController.downloadingLogs && logController.model.count > 0
                     text:       qsTr("发送日志")
                     width:      _butttonWidth
-                    onClicked:{
+                    //筛选日期
 
+                    onClicked:{
+                        //-- Clear selection
+                        for(var i = 0; i < logController.model.count; i++) {
+                            var o = logController.model.get(i)
+                            if (o) o.selected = false
+                        }
+                        //-- Flag selected log files
+                        tableView.selection.forEach(function(rowIndex){
+                            var o = logController.model.get(rowIndex)
+                            if (o) o.selected = true
+                            console.log(o.id)
+                        })
+                        NetWorkManager.runTask();
+                              // NetWorkManager.runTask()
                     }
 
-
-                }
-
+                  }
                 QGCButton {
                     enabled:    !logController.requestingList && !logController.downloadingLogs && logController.model.count > 0
                     text:       qsTr("Erase All")

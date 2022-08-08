@@ -10,7 +10,6 @@
 
 #include "LogDownloadController.h"
 #include "MultiVehicleManager.h"
-#include "QGCMAVLink.h"
 #include "UAS.h"
 #include "QGCApplication.h"
 #include "QGCToolbox.h"
@@ -117,15 +116,8 @@ LogDownloadController::LogDownloadController(void)
     MultiVehicleManager *manager = qgcApp()->toolbox()->multiVehicleManager();
     connect(manager, &MultiVehicleManager::activeVehicleChanged, this, &LogDownloadController::_setActiveVehicle);
     connect(&_timer, &QTimer::timeout, this, &LogDownloadController::_processDownload);
-
     //202285
     _setActiveVehicle(manager->activeVehicle());
-
-    NetWorkManager *netmanager = qgcApp()->toolbox()->netWorkManager();
-    //202288
-    connect(this,&LogDownloadController::downloadcomplete,netmanager,&NetWorkManager::addTask);
-
-
 }
 
 //----------------------------------------------------------------------------------------
@@ -420,12 +412,18 @@ LogDownloadController::_receivedAllData()
         //-- Request Log
         _requestLogData(_downloadData->ID, 0, _downloadData->chunk_table.size()*MAVLINK_MSG_LOG_DATA_FIELD_DATA_LEN);
         _timer.start(kTimeOutMilliseconds);
-        QFileInfo fileInfo = QFileInfo(_downloadData->file);
-        emit downloadcomplete(fileInfo.absoluteFilePath());
     } else {
         _resetSelection();
         _setDownloading(false);
     }
+    //202285下载完文件后发送下载好的名字
+    QFileInfo fileInfo = QFileInfo(_downloadData->file);
+
+//    emit readySendlog(fileInfo.absoluteFilePath());
+//    LogSendTask*logtask =new LogSendTask(fileInfo.absoluteFilePath());
+//    qgcApp()->toolbox()->netWorkManager()->addTask(logtask);
+//    qgcApp()->toolbox()->netWorkManager()->show();
+
 }
 
 //----------------------------------------------------------------------------------------
@@ -574,7 +572,11 @@ void LogDownloadController::downloadToDirectory(const QString& dir)
 }
 //202288
 //----------------------------------------------------------------------------------------
+void
+LogDownloadController::sendLogFile(QString file)
+{
 
+}
 //----------------------------------------------------------------------------------------
 void
 LogDownloadController::filerData(QString filerDataType)

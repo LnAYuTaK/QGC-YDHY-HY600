@@ -35,7 +35,7 @@ class SettingsManager;
 class AirspaceManager;
 class ADSBVehicleManager;
 //202282
-class DataManager;
+class NetWorkManager;
 #if defined(QGC_ENABLE_PAIRING)
 class PairingManager;
 #endif
@@ -71,8 +71,13 @@ public:
     SettingsManager*            settingsManager         () { return _settingsManager; }
     AirspaceManager*            airspaceManager         () { return _airspaceManager; }
     ADSBVehicleManager*         adsbVehicleManager      () { return _adsbVehicleManager; }
-    //202282
-    DataManager *               dataManager             () { return _dataManager; }
+    //202288
+    NetWorkManager *            netWorkManager          () {return _netWorkManager;}
+
+
+
+
+
 
 #if defined(QGC_ENABLE_PAIRING)
     PairingManager*             pairingManager          () { return _pairingManager; }
@@ -116,7 +121,8 @@ private:
     AirspaceManager*            _airspaceManager        = nullptr;
     ADSBVehicleManager*         _adsbVehicleManager     = nullptr;
     //202282
-    DataManager *               _dataManager            = nullptr;
+    NetWorkManager *            _netWorkManager         = nullptr;
+
 #if defined(QGC_ENABLE_PAIRING)
     PairingManager*             _pairingManager         = nullptr;
 #endif

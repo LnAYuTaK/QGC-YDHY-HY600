@@ -428,10 +428,8 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 #
 
 HEADERS += \
-    src/DataHandle/DataManager.h \
-    src/DataHandle/DataSender.h \
-    src/NetWorkLayer/NetLayer.h \
-    src/NetWorkLayer/NetManage.h \
+    src/DataHandle/DataController.h \
+    src/NetWorkLayer/NetWorkManager.h \
     src/NetWorkLayer/ParaEditor.h \
     src/QmlControls/QmlUnitsConversion.h \
     src/Settings/HySettings.h \
@@ -449,10 +447,8 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 }
 
 SOURCES += \
-    src/DataHandle/DataManager.cpp \
-    src/DataHandle/DataSender.cpp \
-    src/NetWorkLayer/NetLayer.cpp \
-    src/NetWorkLayer/NetManage.cpp \
+    src/DataHandle/DataController.cpp \
+    src/NetWorkLayer/NetWorkManager.cpp \
     src/NetWorkLayer/ParaEditor.cpp \
     src/Settings/HySettings.cpp \
     src/Vehicle/VehicleEscStatusFactGroup.cc \

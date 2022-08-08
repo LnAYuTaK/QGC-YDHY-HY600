@@ -112,19 +112,15 @@ private:
 //初始化静态变量
 
 //数据管理类
-class DataManager : public QGCTool
+class DataController: public QObject
 {
-    Q_OBJECT
 
-//
+    Q_OBJECT
 public:
-     DataManager(QGCApplication* app, QGCToolbox* toolbox);
-     // Override from QGCTool
-     virtual void setToolbox(QGCToolbox* toolbox)final;
+     DataController();
      //send netdata
      void  sendData();
      void  saveDataLocal();
-
 private:
     VehicleDataFactPack* createDataFact(Vehicle* vehicle);
     //
@@ -137,9 +133,6 @@ private:
     //Test 定时器连接活跃的Vehicle
     QTimer  *dataSendTimer;
     QTcpSocket mSocket;
-
-
-
 
 protected:
     QGCApplication* _app;
