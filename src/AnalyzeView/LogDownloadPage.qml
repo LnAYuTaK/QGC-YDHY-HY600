@@ -28,7 +28,7 @@ AnalyzePage {
     pageComponent:      pageComponent
     pageDescription:    qsTr("Log Download allows you to download binary log files from your vehicle. Click Refresh to get list of available logs.")
 
-    property real _margin:          ScreenTools.defaultFontPixelWidth
+    property real _margin:          ScreenTools.defaultFontPixelWidth *0.5
     property real _butttonWidth:    ScreenTools.defaultFontPixelWidth * 10
 
     QGCPalette { id: palette; colorGroupEnabled: enabled }
@@ -75,7 +75,7 @@ AnalyzePage {
 
                 TableViewColumn {
                     title: qsTr("Date")
-                    width: ScreenTools.defaultFontPixelWidth * 20
+                    width: ScreenTools.defaultFontPixelWidth * 10
                     horizontalAlignment: Text.AlignHCenter
                     delegate: Text  {
                         text: {
@@ -97,7 +97,7 @@ AnalyzePage {
 
                 TableViewColumn {
                     title: qsTr("Size")
-                    width: ScreenTools.defaultFontPixelWidth * 15
+                    width: ScreenTools.defaultFontPixelWidth * 8
                     horizontalAlignment: Text.AlignHCenter
                     delegate : Text  {
                         horizontalAlignment: Text.AlignRight
@@ -110,7 +110,7 @@ AnalyzePage {
 
                 TableViewColumn {
                     title: qsTr("Status")
-                    width: ScreenTools.defaultFontPixelWidth * 20
+                    width: ScreenTools.defaultFontPixelWidth * 10
                     horizontalAlignment: Text.AlignHCenter
                     delegate : Text  {
                         horizontalAlignment: Text.AlignHCenter
@@ -174,43 +174,20 @@ AnalyzePage {
                         }
                     }
                 }
+
                QGCButton {
                     enabled:    !logController.requestingList && !logController.downloadingLogs && logController.model.count > 0
                     text:       qsTr("筛选")
                     width:      _butttonWidth
                     //筛选日期
-                    onClicked:{
-                        dateDialog.visible =  true
+                    onClicked: {
+                        logController.filerData("Today")
                     }
-                    Dialog {
-                        id: dateDialog
-                        visible: false
-                        title: "Choose a date"
-                        width:ScreenTools.defaultFontPixelWidth * 20
-                        height: ScreenTools.defaultFontPixelWidth * 20
-                     Row {
-                        spacing: 10
-                        Button{
-                            text:"今天"
-                            onClicked:{
-                               logController.filerData("Today")
-                            }
-                        }
-                        Button{
-                            text: "五天内"
-                            onClicked:{
-                               logController.filerData("FiveDay")
-                            }
-                          }
-                        }
-                    }
-
                 }
                QGCButton {
                     enabled:    !logController.requestingList && !logController.downloadingLogs && logController.model.count > 0
                     text:       qsTr("发送日志")
                     width:      _butttonWidth
-                    //筛选日期
 
                     onClicked:{
                         //-- Clear selection
@@ -225,7 +202,7 @@ AnalyzePage {
                             console.log(o.id)
                         })
                         NetWorkManager.runTask();
-                              // NetWorkManager.runTask()
+
                     }
 
                   }

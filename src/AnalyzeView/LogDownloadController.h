@@ -142,7 +142,8 @@ signals:
     void modelChanged           ();
     void selectionChanged       ();
     //202288 œ¬‘ÿÕÍ≥…
-    void downloadcomplete       (QString filename);
+    void downloadcomplete       (QString filename,QGCLogEntry* logEntry);
+
 
 private slots:
     void _setActiveVehicle  (Vehicle* vehicle);
@@ -178,12 +179,6 @@ private:
     int                 _retries;
     int                 _apmOneBased;
     QString             _downloadPath;
-
-
-
-
-
-
 
 
 

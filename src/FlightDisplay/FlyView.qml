@@ -134,7 +134,7 @@ Item {
         color:              qgcPal.window
         visible:            false
     }
-
+//地图
     FlyViewMap {
         id:                     mapControl
         planMasterController:   _planController

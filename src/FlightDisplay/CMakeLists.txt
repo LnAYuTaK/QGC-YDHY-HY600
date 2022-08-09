@@ -40,6 +40,7 @@ add_custom_target(FligthDisplayQml
 		ProximityRadarValues.qml
 		ProximityRadarVideoView.qml
 		RoverChecklist.qml
+                            
 		SubChecklist.qml
 		TelemetryValuesBar.qml
 		TerrainProgress.qml

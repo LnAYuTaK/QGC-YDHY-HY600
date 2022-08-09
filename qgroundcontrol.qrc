@@ -183,7 +183,7 @@
         <file alias="QGroundControl/Controls/TerrainStatus.qml">src/PlanView/TerrainStatus.qml</file>
         <file alias="QGroundControl/Controls/TakeoffItemMapVisual.qml">src/PlanView/TakeoffItemMapVisual.qml</file>
         <file alias="QGroundControl/Controls/ToolStrip.qml">src/QmlControls/ToolStrip.qml</file>
-       	<file alias="QGroundControl/Controls/ToolStripHoverButton.qml">src/QmlControls/ToolStripHoverButton.qml</file>
+        <file alias="QGroundControl/Controls/ToolStripHoverButton.qml">src/QmlControls/ToolStripHoverButton.qml</file>
         <file alias="QGroundControl/Controls/TransectStyleComplexItemEditor.qml">src/PlanView/TransectStyleComplexItemEditor.qml</file>
         <file alias="QGroundControl/Controls/TransectStyleComplexItemStats.qml">src/PlanView/TransectStyleComplexItemStats.qml</file>
         <file alias="QGroundControl/Controls/TransectStyleComplexItemTabBar.qml">src/PlanView/TransectStyleComplexItemTabBar.qml</file>
@@ -278,12 +278,15 @@
         <file alias="SyslinkComponent.qml">src/AutoPilotPlugins/Common/SyslinkComponent.qml</file>
         <file alias="TaisyncSettings.qml">src/Taisync/TaisyncSettings.qml</file>
         <file alias="TcpSettings.qml">src/ui/preferences/TcpSettings.qml</file>
-        <file alias="test.qml">src/test.qml</file>
         <file alias="UdpSettings.qml">src/ui/preferences/UdpSettings.qml</file>
         <file alias="VehicleSummary.qml">src/VehicleSetup/VehicleSummary.qml</file>
         <file alias="VibrationPage.qml">src/AnalyzeView/VibrationPage.qml</file>
         <file alias="VirtualJoystick.qml">src/FlightDisplay/VirtualJoystick.qml</file>
         <file alias="VTOLLandingPatternEditor.qml">src/PlanView/VTOLLandingPatternEditor.qml</file>
+        <file alias="QGroundControl/MenuTool/RightMenuToolStrip.qml">src/MenuTool/RightMenuToolStrip.qml</file>
+        <file alias="QGroundControl/MenuTool/RightMenuToolStripList.qml">src/MenuTool/RightMenuToolStripList.qml</file>
+        <file alias="QGroundControl/MenuTool/qmldir">src/QmlControls/QGroundControl/MenuTool/qmldir</file>
+        <file alias="QGroundControl/MenuTool/UserMsgInfoView.qml">src/MenuTool/UserMsgInfoView.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>

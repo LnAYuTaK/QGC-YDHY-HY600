@@ -29,6 +29,8 @@ import QGroundControl.FlightMap     1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Vehicle       1.0
+import QGroundControl.MenuTool      1.0
+
 
 // This is the ui overlay layer for the widgets/tools for Fly View
 Item {
@@ -51,6 +53,7 @@ Item {
 
     QGCToolInsets {
         id:                     _totalToolInsets
+        //添加到左侧
         leftEdgeTopInset:       toolStrip.leftInset
         leftEdgeCenterInset:    toolStrip.leftInset
         leftEdgeBottomInset:    parentToolInsets.leftEdgeBottomInset
@@ -247,6 +250,22 @@ Item {
 
         property real leftInset: x + width
     }
+
+    //2022 8.9添加右侧导航栏
+    RightMenuToolStrip{
+        id:                    rightMenutoolstrip
+        //anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
+        anchors.topMargin:      _toolsMargin + parentToolInsets.topEdgeLeftInset
+        anchors.left:           toolStrip.left
+        anchors.top:            toolStrip.bottom
+
+        z:                      QGroundControl.zOrderWidgets
+        maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
+        visible:                !QGroundControl.videoManager.fullScreen
+        property real leftInset: x + width
+
+    }
+
 
     FlyViewAirspaceIndicator {
         anchors.top:                parent.top

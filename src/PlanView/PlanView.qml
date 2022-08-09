@@ -608,7 +608,9 @@ Item {
         }
 
         //-----------------------------------------------------------
+        //
         // Left tool strip
+        // 第一個plan 内部
         ToolStrip {
             id:                 toolStrip
             anchors.margins:    _toolsMargin
@@ -723,6 +725,29 @@ Item {
 
             onDropped: allAddClickBoolsOff()
         }
+
+//        ToolStrip {
+//            id:                 testStrip
+//            anchors.margins:    _toolsMargin
+//            anchors.left:       toolStrip.left
+//            anchors.top:        toolStrip.bottom
+//            width:              200
+//            height :            300
+//            z:                  QGroundControl.zOrderWidgets
+//            maxHeight:          parent.height - toolStrip.y
+//            title:              qsTr("Test")
+//            ToolStripActionList  {
+//                id: toolText
+//                model: [
+//                    ToolStripAction {
+//                        text:           qsTr("Fly")
+//                        iconSource:     "/qmlimages/PaperPlane.svg"
+//                        onTriggered:    mainWindow.showFlyView()
+//                    }
+//                ]
+//            }
+//             model: toolText.model
+//         }
 
         //-----------------------------------------------------------
         // Right pane for mission editing controls

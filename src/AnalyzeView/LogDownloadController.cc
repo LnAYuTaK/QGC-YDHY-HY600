@@ -421,11 +421,13 @@ LogDownloadController::_receivedAllData()
         _requestLogData(_downloadData->ID, 0, _downloadData->chunk_table.size()*MAVLINK_MSG_LOG_DATA_FIELD_DATA_LEN);
         _timer.start(kTimeOutMilliseconds);
         QFileInfo fileInfo = QFileInfo(_downloadData->file);
-        emit downloadcomplete(fileInfo.absoluteFilePath());
+        emit downloadcomplete(fileInfo.absoluteFilePath(),_downloadData->entry);
+
     } else {
         _resetSelection();
         _setDownloading(false);
     }
+
 }
 
 //----------------------------------------------------------------------------------------

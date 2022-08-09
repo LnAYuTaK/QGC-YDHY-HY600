@@ -20,6 +20,7 @@ import QGroundControl.Controls      1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.FlightMap     1.0
+import QGroundControl.MenuTool      1.0
 
 /// @brief Native QML top level window
 /// All properties defined here are visible to all QML pages.
@@ -145,6 +146,7 @@ ApplicationWindow {
         planView.visible = true
     }
 
+
     function showTool(toolTitle, toolSource, toolIcon) {
         toolDrawer.backIcon     = flightView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
         toolDrawer.toolTitle    = toolTitle
@@ -163,6 +165,10 @@ ApplicationWindow {
 
     function showSettingsTool() {
         showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
+    }
+
+    function showUserTool(){
+       showTool(qsTr("UserMsgInfo View"),"UserMsgInfoView.qml","/res/yonghu.svg")
     }
 
     //-------------------------------------------------------------------------
@@ -238,6 +244,7 @@ ApplicationWindow {
         return dialog
     }
 
+
     Component {
         id: popupDialogContainerComponent
         QGCPopupDialogContainer { }
@@ -286,7 +293,7 @@ ApplicationWindow {
 
     MessageDialog {
         id:                 pendingParameterWritesCloseDialog
-        title:              qsTr("%1 close").arg(QGroundControl.appName)
+        title:              qsTr("%1 close").arg("YDHY")
         text:               qsTr("You have pending parameter updates to a vehicle. If you close you will lose changes. Are you sure you want to close?")
         standardButtons:    StandardButton.Yes | StandardButton.No
         modality:           Qt.ApplicationModal
@@ -305,7 +312,7 @@ ApplicationWindow {
 
     MessageDialog {
         id:                 activeConnectionsCloseDialog
-        title:              qsTr("%1 close").arg(QGroundControl.appName)
+        title:              qsTr("%1 close").arg("YDHY")
         text:               qsTr("There are still active connections to vehicles. Are you sure you want to exit?")
         standardButtons:    StandardButton.Yes | StandardButton.Cancel
         modality:           Qt.ApplicationModal
@@ -325,6 +332,7 @@ ApplicationWindow {
     background: Item {
         id:             rootBackground
         anchors.fill:   parent
+
     }
 
     //-------------------------------------------------------------------------
@@ -345,110 +353,6 @@ ApplicationWindow {
             showPopupDialogFromComponent(toolSelectDialogComponent)
         }
     }
-    //右侧导航栏组件
-     Rectangle{
-             anchors.right: parent.right
-             //显示区域的颜色背景
-             width: 480;
-             height: 640;
-             color: "#6843d1";
-             property bool unfold: false;
-             visible:  true
-             Rectangle{
-                 id: barRect;
-                 width: unfold ? 240 : 64;
-                 height: 384;
-                 radius: 10;
-                 anchors.centerIn: parent;
-                 color: "#f5f5f5";
-                 clip: true;
-                 Behavior on width{
-                     NumberAnimation{duration: 300;}
-                 }
-                 ListModel{
-                     id: appModel;
-                     ListElement{
-                         name: "Home";
-                         icon: "qrc:/qmlimages/VehicleDown.png";
-                     }
-                     ListElement{
-                         name: "Sign Out";
-                         icon: "qrc:/qmlimages/VehicleDown.png";
-                     }
-                 }
-                 Component{
-                     id: appDelegate;
-                     Rectangle {
-                         id: delegateBackground;
-                         width: barRect.width;
-                         height: 48;
-                         radius: 5;
-                         color: "#00000000";
-                         //显示图标
-                         Image {
-                             id: imageIcon;
-                             width: 24;
-                             height: 24;
-                             anchors.verticalCenter: parent.verticalCenter;
-                             anchors.left: parent.left;
-                             anchors.leftMargin: 18;
-                             mipmap: true;
-                             source: icon;
-                         }
-                         //显示APP文字
-                         Text {
-                             anchors.left: imageIcon.right;
-                             anchors.leftMargin: 40;
-                             anchors.verticalCenter: imageIcon.verticalCenter;
-                             color: "#6843d1"
-                             text: name;
-                             font{family: "微软雅黑"; pixelSize: 20;}
-                         }
-                         //鼠标处理
-                         MouseArea{
-                             anchors.fill: parent;
-                             hoverEnabled: true;
-                             onEntered: delegateBackground.color = "#10000000";
-                             onExited: delegateBackground.color = "#00000000";
-                         }
-                     }
-                 }
-                 GridView{
-                     id: appGrid;
-                     width: 160;
-                     height: parent.height;
-                     anchors.left: parent.left;
-                     anchors.top: parent.top;
-                     anchors.topMargin: 12;
-                     model: appModel;
-                     delegate: appDelegate;
-                     cellWidth: width;
-                     cellHeight: 60;
-                 }
-             }
-             // 展开/收回按钮
-             Rectangle{
-                 width: 34;
-                 height: width;
-                 radius: width/2;
-                 color: "#f5f5f5";
-                 border.color: "#6843d1";
-                 border.width: 5;
-                 anchors.left: barRect.right;
-                 anchors.leftMargin: -width/2;
-                 anchors.verticalCenter: barRect.verticalCenter;
-                 Image {
-                     width: 24;
-                     height: 24;
-                     anchors.centerIn: parent;
-                     mipmap: true;
-                     //此处使用旋转1180度实现展开按钮图标和收回按钮图标
-                     rotation: unfold? 180:0;
-                     source: "qrc:/qmlimages/VehicleDown.png";
-                 }
-              }
-           }
-
 
 
     Component {
@@ -571,7 +475,7 @@ ApplicationWindow {
         }
 
     }
-
+//飞行界面  地图
     FlyView {
         id:             flightView
         anchors.fill:   parent

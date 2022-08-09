@@ -56,6 +56,7 @@
         <file alias="waypoint.svg">resources/waypoint.svg</file>
         <file>resources/icons/qgroundcontrol.ico</file>
         <file>resources/WindowsYDHY.svg</file>
+        <file alias="yonghu.svg">resources/yonghu.svg</file>
     </qresource>
     <qresource prefix="/res/firmware">
         <file alias="3drradio.png">resources/firmware/3drradio.png</file>

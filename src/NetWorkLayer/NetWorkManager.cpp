@@ -1,7 +1,8 @@
 #include "NetWorkManager.h"
-LogSendTask ::LogSendTask (QString filename)
+LogSendTask ::LogSendTask (QString filename,QGCLogEntry* logentry)
 {
-       this->_logFile=filename;
+       this->_logFile  = filename;
+       this->_logEntry = logentry;
 }
 
 bool LogSendTask::ready()
@@ -40,18 +41,18 @@ void LogSendTask::work()
  //发送 请求包  和文件数据 没分包
  mSock.write(_reqPack.toLatin1());
  mSock.write(_filedata);
- if (mSock.waitForReadyRead(10)){
-           QByteArray replymsg =mSock.readAll();
-           qDebug() << replymsg;
-           if(replymsg == "OK"){
-               qDebug()<<"SUCCESSFULE SENDLOG";
-               return;
-           }
-           else{
-                qDebug()<<"FAIL SENDLOG_";
-               return;
-           }
-        }
+#if 0
+// if (mSock.waitForReadyRead(10)){
+//           QByteArray replymsg =mSock.readAll();
+//           qDebug() << replymsg;
+//           if(replymsg == "OK"){
+//               return;
+//           }
+//           else{
+//               return;
+//           }
+//        }
+ #endif
 }
 
 void LogSendTask ::send()
@@ -76,9 +77,10 @@ void NetWorkManager::setToolbox(QGCToolbox *toolbox)
     _datacontroller =new DataController();
 }
 
-bool NetWorkManager::addTask(QString filename)
+bool NetWorkManager::addTask(QString filename,QGCLogEntry* logEntry)
 {
-    LogSendTask* task = new LogSendTask(filename);
+   if(logEntry!=nullptr) {
+    LogSendTask* task = new LogSendTask(filename,logEntry);
     if(task!=nullptr){
        _mutex.lock();
        _taskQueue.enqueue(task);
@@ -86,7 +88,8 @@ bool NetWorkManager::addTask(QString filename)
        return true;
     }
     task->deleteLater();
-    return false;
+  }
+  return false;
 }
 
 void NetWorkManager::_workerError(QString errorMessage)
@@ -115,13 +118,6 @@ void NetWorkManager::runTask()
          }
       }
    }
-}
-
-void NetWorkManager::show()
-{
-
-    qDebug()<< _taskQueue.size();
-
 }
 
 
