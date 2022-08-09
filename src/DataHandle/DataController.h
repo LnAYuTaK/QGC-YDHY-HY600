@@ -15,16 +15,15 @@
 #include "Vehicle.h"
 #include  "Settings/HySettings.h"
 
-
 #define   PACKHEAD  "EB90"
+
 //植保机DataFact
 class  VehicleDataFactPack:public QObject
 {
     Q_OBJECT
 public:
       explicit VehicleDataFactPack(QObject *parent = nullptr);
-      //对外接口获取数据的接口
-      //pack 内部开了空间注意清理
+      //qml获取数据的接口
       QString   pack                      () ;
       Q_INVOKABLE bool     flightState    () {return _flightState;}
       Q_INVOKABLE QString  flightTime     () {return _flightTime;}
@@ -37,7 +36,6 @@ public:
       Q_INVOKABLE double   flightTailTude () {return _flightTailTude;}
       Q_INVOKABLE double   groundSpeed    () {return _groundSpeed;}
       Q_INVOKABLE QString  flightMode     () {return _flightMode;}
-
       //飞行模式类型// 还有别的类型后续添加
       const QStringList FlightModeType {
               "PreFlight",
@@ -83,8 +81,6 @@ public slots:
 
       void _vehicleDataSendNumChanged();
 
-
-
 private:
       static bool      _flightState;
       static QString   _flightTime;
@@ -114,7 +110,6 @@ private:
 //数据管理类
 class DataController: public QObject
 {
-
     Q_OBJECT
 public:
      DataController();
@@ -135,8 +130,7 @@ private:
     QTcpSocket mSocket;
 
 protected:
-    QGCApplication* _app;
-    QGCToolbox*     _toolbox;
+
 
 signals:
     void sendDataNumAdd();//发送次数增加

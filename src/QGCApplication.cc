@@ -438,6 +438,10 @@ QGCApplication::~QGCApplication()
     _app = nullptr;
 }
 
+
+
+
+
 void QGCApplication::_initCommon()
 {
     static const char* kRefOnly         = "Reference only";
@@ -449,7 +453,7 @@ void QGCApplication::_initCommon()
     QSettings settings;
 
     // Register our Qml objects
-
+//×¢²áµ½qmlÊµÀý»¯
     qmlRegisterType<QGCPalette>     ("QGroundControl.Palette", 1, 0, "QGCPalette");
     qmlRegisterType<QGCMapPalette>  ("QGroundControl.Palette", 1, 0, "QGCMapPalette");
 

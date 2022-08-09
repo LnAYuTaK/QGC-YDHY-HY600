@@ -1,7 +1,6 @@
 #include "DataController.h"
 //初始化 VehicleDataFactPack
 
-
 //调试宏
 #define DEBUGINFO
 //对外显示的数据
@@ -23,8 +22,8 @@ VehicleDataFactPack::VehicleDataFactPack(QObject *parent)
     : QObject{parent}
 {
    //初始化vehiclePack方便赋值
-    vehiclePack.append(packHead);       //帧头   0
-    vehiclePack.append(QString(4,'0'));
+    vehiclePack.append(packHead);      //帧头   0
+    vehiclePack.append(QString(4,'0')); //发送次数 1
     vehiclePack.append(QString(8,'0'));//起飞时间 2
     vehiclePack.append(QString(3,'0'));//无人机ID 3
     vehiclePack.append(QString(3,'0'));//用户ID  4
@@ -55,8 +54,7 @@ void VehicleDataFactPack::_vehicleDataSendNumChanged()
 }
 void VehicleDataFactPack::_vehicleMsgText(QString messageText)
 {
-    if(messageText== "No Load RTL")
-    {
+    if(messageText== "No Load RTL") {
         _gaugetype  = 0;
         vehiclePack[20] = QString("%1").arg(_gaugetype,1,16,QLatin1Char('0'));
     }
@@ -64,7 +62,7 @@ void VehicleDataFactPack::_vehicleMsgText(QString messageText)
 
 void VehicleDataFactPack::_vehicleFlightTime(QString time)
 {
-    if(!_upDataFlightFlag){
+    if(!_upDataFlightFlag) {
        _flightTime       = time;
        _upDataFlightFlag = true;  
     }     
@@ -193,15 +191,12 @@ QVector <qint64> VehicleDataFactPack::splitDouble(double data,qint16 digit)
 QString VehicleDataFactPack::pack()
 {
     QString  pack;
-    for(int i = 0;i<vehiclePack.size();++i)
-    {
+    for(int i = 0;i<vehiclePack.size();++i){
          pack +=vehiclePack[i];
     }
-
     QByteArray pack_array = pack.toLatin1();
     long checksumtemp = 0;
     for(int i = 0; i < pack_array.size(); i++){
-
         checksumtemp +=pack_array[i];
     }
     QString checkSum   = QString("%1").arg(checksumtemp,4,16,QLatin1Char('0'));
@@ -210,11 +205,13 @@ QString VehicleDataFactPack::pack()
 
 DataController::DataController()
 {
+   //初始化内部参数datamap表存放数据
    dataFactMap = new QMap<int,VehicleDataFactPack *>;
    dataSendTimer =new  QTimer();
-   QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-   connect(qgcApp()->toolbox()->multiVehicleManager(),&MultiVehicleManager::vehicleAdded, this,&DataController::dataFactAdd);
-   connect(qgcApp()->toolbox()->multiVehicleManager(),&MultiVehicleManager::vehicleRemoved, this,&DataController::dataFactRemove);
+   MultiVehicleManager *manager = qgcApp()->toolbox()->multiVehicleManager();
+   connect(manager,&MultiVehicleManager::vehicleAdded, this,&DataController::dataFactAdd);
+   connect(manager,&MultiVehicleManager::vehicleRemoved, this,&DataController::dataFactRemove);
+
    connect(dataSendTimer,&QTimer::timeout,this,&DataController::sendData);
    connect(dataSendTimer,&QTimer::timeout,this,&DataController::saveDataLocal);
    dataSendTimer->setInterval(1000);
@@ -232,7 +229,7 @@ VehicleDataFactPack* DataController::createDataFact(Vehicle* vehicle)
 void DataController::dataFactAdd(Vehicle* vehicle)
 {
    VehicleDataFactPack * data  =this->createDataFact(vehicle);
-   if(data!=nullptr){
+   if((data!=nullptr)){
        dataFactMap->insert(vehicle->id(),data);
        //一个Vehicle 对应一个datafact的先测试这么用
        vehicleIDID = vehicle->id();
@@ -253,7 +250,6 @@ void DataController::dataFactAdd(Vehicle* vehicle)
        connect(this,&DataController::sendDataNumAdd,data,&VehicleDataFactPack::_vehicleDataSendNumChanged);
        dataSendTimer->start();
    }
-
 }
 
 void DataController::dataFactRemove(Vehicle* vehicle)
@@ -269,13 +265,11 @@ void DataController::dataFactRemove(Vehicle* vehicle)
     }
 }
 
-
 //测试
 void DataController::sendData()
 {
       mSocket.connectToHost("192.168.3.113",8900);
-      if(dataFactMap!=nullptr)
-      {
+      if(dataFactMap!=nullptr){
          VehicleDataFactPack *pack = dataFactMap->value(vehicleIDID);
          mSocket.write(pack->pack().toLocal8Bit());
          emit sendDataNumAdd();
@@ -283,7 +277,7 @@ void DataController::sendData()
       }
 }
 
-//TODU
+//TODU 需要重构
 //这里是存储到本地 根据AppSetting 的文件夹存放
 void DataController::saveDataLocal()
 {

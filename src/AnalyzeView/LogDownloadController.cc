@@ -120,11 +120,9 @@ LogDownloadController::LogDownloadController(void)
 
     //202285
     _setActiveVehicle(manager->activeVehicle());
-
     NetWorkManager *netmanager = qgcApp()->toolbox()->netWorkManager();
     //202288
     connect(this,&LogDownloadController::downloadcomplete,netmanager,&NetWorkManager::addTask);
-
 
 }
 
