@@ -112,8 +112,10 @@ Item {
     FlyViewInstrumentPanel {
         id:                         instrumentPanel
         anchors.margins:            _toolsMargin
-        anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
-        anchors.right:              parent.right
+        //anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
+        //anchors.right:              parent.right
+        anchors.bottom:              parent.bottom
+        anchors.horizontalCenter:    parent.horizontalCenter
         width:                      _rightPanelWidth
         spacing:                    _toolsMargin
         visible:                    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && multiVehiclePanelSelector.showSingleVehiclePanel
@@ -121,34 +123,38 @@ Item {
 
         property real rightInset: visible ? parent.width - x : 0
     }
+//2022810
+//右侧PhotoVideo暂时屏蔽
+//    PhotoVideoControl {
+//        id:                     photoVideoControl
+//        anchors.margins:        _toolsMargin
 
-    PhotoVideoControl {
-        id:                     photoVideoControl
-        anchors.margins:        _toolsMargin
-        anchors.right:          parent.right
-        width:                  _rightPanelWidth
-        state:                  _verticalCenter ? "verticalCenter" : "topAnchor"
-        states: [
-            State {
-                name: "verticalCenter"
-                AnchorChanges {
-                    target:                 photoVideoControl
-                    anchors.top:            undefined
-                    anchors.verticalCenter: _root.verticalCenter
-                }
-            },
-            State {
-                name: "topAnchor"
-                AnchorChanges {
-                    target:                 photoVideoControl
-                    anchors.verticalCenter: undefined
-                    anchors.top:            instrumentPanel.bottom
-                }
-            }
-        ]
+//        anchors.bottom:         parent.bottom
+//        anchors.right:          parent.right
+//        width:                  _rightPanelWidth
+//        height:                  200
+//        state:                  _verticalCenter ? "verticalCenter" : "topAnchor"
+//        states: [
+//            State {
+//                name: "verticalCenter"
+//                AnchorChanges {
+//                    target:                 photoVideoControl
+//                    anchors.top:            undefined
+//                    anchors.verticalCenter: _root.verticalCenter
+//                }
+//            },
+//            State {
+//                name: "topAnchor"
+//                AnchorChanges {
+//                    target:                 photoVideoControl
+//                    anchors.verticalCenter: undefined
+//                    anchors.top:            instrumentPanel.bottom
+//                }
+//            }
+//        ]
 
-        property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
-    }
+//        property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
+//    }
 
     TelemetryValuesBar {
         id:                 telemetryPanel
@@ -244,28 +250,11 @@ Item {
         anchors.top:            parent.top
         z:                      QGroundControl.zOrderWidgets
         maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
-        visible:                !QGroundControl.videoManager.fullScreen
-
+        visible:                false
         onDisplayPreFlightChecklist: mainWindow.showPopupDialogFromComponent(preFlightChecklistPopup)
 
         property real leftInset: x + width
     }
-
-    //2022 8.9添加右侧导航栏
-    RightMenuToolStrip{
-        id:                    rightMenutoolstrip
-        //anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
-        anchors.topMargin:      _toolsMargin + parentToolInsets.topEdgeLeftInset
-        anchors.left:           toolStrip.left
-        anchors.top:            toolStrip.bottom
-
-        z:                      QGroundControl.zOrderWidgets
-        maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
-        visible:                !QGroundControl.videoManager.fullScreen
-        property real leftInset: x + width
-
-    }
-
 
     FlyViewAirspaceIndicator {
         anchors.top:                parent.top

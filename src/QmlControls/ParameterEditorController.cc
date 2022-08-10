@@ -19,7 +19,6 @@ ParameterEditorController::ParameterEditorController(void)
     : _parameterMgr(_vehicle->parameterManager())
 {
     _buildLists();
-
     connect(this, &ParameterEditorController::currentCategoryChanged,   this, &ParameterEditorController::_currentCategoryChanged);
     connect(this, &ParameterEditorController::currentGroupChanged,      this, &ParameterEditorController::_currentGroupChanged);
     connect(this, &ParameterEditorController::searchTextChanged,        this, &ParameterEditorController::_searchTextChanged);

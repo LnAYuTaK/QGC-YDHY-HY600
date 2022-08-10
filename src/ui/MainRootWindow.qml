@@ -146,7 +146,12 @@ ApplicationWindow {
         planView.visible = true
     }
 
+//    function showMenuTool() {
+//      viewSwitch(toolbar.planViewToolbar)
+//      //planView.visible = true
+//    }
 
+    //大界面
     function showTool(toolTitle, toolSource, toolIcon) {
         toolDrawer.backIcon     = flightView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
         toolDrawer.toolTitle    = toolTitle
@@ -168,7 +173,7 @@ ApplicationWindow {
     }
 
     function showUserTool(){
-       showTool(qsTr("UserMsgInfo View"),"UserMsgInfoView.qml","/res/yonghu.svg")
+       showTool(qsTr("UserMsgInfo View"),"qrc:/qml/QGroundControl/MenuTool/UserMsgInfoView.qml","/res/yonghu.svg")
     }
 
     //-------------------------------------------------------------------------
@@ -242,6 +247,15 @@ ApplicationWindow {
         var dialog = popupDialogContainerComponent.createObject(mainWindow, { dialogSource: source, dialogProperties: properties })
         dialog.open()
         return dialog
+    }
+
+    function showRightToolStrip(){
+       if(rightMenutoolstrip.visible==true){
+         rightMenutoolstrip.visible =false;
+       }
+       else{
+          rightMenutoolstrip.visible =true;
+       }
     }
 
 
@@ -473,19 +487,35 @@ ApplicationWindow {
                 }
             }
         }
-
     }
+    //导航栏
+    RightMenuToolStrip{
+        id:                      rightMenutoolstrip
+        anchors.rightMargin:     10
+        //跟顶部的距离
+        anchors.topMargin:       10
+        anchors.right:           parent.right
+        anchors.top:             parent.top
+        z:                       QGroundControl.zOrderWidgets
+        maxHeight:               parent.height
+        visible:                 false
+        property real leftInset: x + width
+    }
+
+
 //飞行界面  地图
     FlyView {
         id:             flightView
         anchors.fill:   parent
     }
-
     PlanView {
         id:             planView
         anchors.fill:   parent
         visible:        false
     }
+
+
+
 
     Drawer {
         id:             toolDrawer

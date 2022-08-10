@@ -14,6 +14,7 @@
 #include "QGCApplication.h"
 #include "Vehicle.h"
 #include  "Settings/HySettings.h"
+#include "NetWorkLayer/NetWorkManager.h"
 
 #define   PACKHEAD  "EB90"
 
@@ -112,7 +113,7 @@ class DataController: public QObject
 {
     Q_OBJECT
 public:
-     DataController();
+     DataController(void);
      //send netdata
      void  sendData();
      void  saveDataLocal();
@@ -133,7 +134,12 @@ protected:
 
 
 signals:
+
     void sendDataNumAdd();//发送次数增加
+
+private:
+     NetWorkManager  *   _networkMgr =nullptr;
+
 
 };
 

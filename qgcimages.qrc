@@ -199,5 +199,21 @@
         <file>src/ui/toolbar/Images/canshu.svg</file>
         <file>src/ui/toolbar/Images/renwu.svg</file>
         <file>src/ui/toolbar/Images/yonghu.svg</file>
+        <file>src/ui/AppSettings.qml</file>
+        <file alias="icon-setting.svg">resources/icon-setting.svg</file>
+        <file alias="shezhi_1.svg">resources/shezhi_1.svg</file>
+        <file>resources/ydhyImage/canshu.svg</file>
+        <file>resources/ydhyImage/renwu.svg</file>
+        <file>resources/ydhyImage/shezhi.svg</file>
+        <file>resources/ydhyImage/shezhi_1.svg</file>
+        <file>resources/ydhyImage/shezhi_2.svg</file>
+        <file>resources/ydhyImage/shezhi_3.svg</file>
+        <file>resources/ydhyImage/shezhi_4.svg</file>
+        <file>resources/ydhyImage/shezhi_5.svg</file>
+        <file>resources/ydhyImage/shezhi_6.svg</file>
+        <file>resources/ydhyImage/shezhi_7.svg</file>
+        <file>resources/ydhyImage/shezhitianchong.svg</file>
+        <file>resources/ydhyImage/shezhixitongshezhigongnengshezhishuxing.svg</file>
+        <file>resources/ydhyImage/yonghu.svg</file>
     </qresource>
 </RCC>

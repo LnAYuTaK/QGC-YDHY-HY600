@@ -57,7 +57,7 @@ public:
    //重构一下
    //Q_INVOKABLE void sendBinLogFile   (QString);
    //管理后台数据的控制器
-   DataController*  datacontroller()   {return _datacontroller;}
+   //DataController*  datacontroller()   {return _datacontroller;}
    //队列里边添加任务
    bool                  addTask       (QString filename , QGCLogEntry*  logEntry);
    //执行所有任务
@@ -65,7 +65,7 @@ public:
 
 private:
    QMutex                             _mutex;
-   DataController*                    _datacontroller;
+//   DataController*                    _datacontroller;
    //发送日志任务
    //LogSendTask                      _worker;
    //错误信息

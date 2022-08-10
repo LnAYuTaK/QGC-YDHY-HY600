@@ -95,6 +95,7 @@ Item {
         visible:            !QGroundControl.videoManager.fullScreen
     }
 
+
     GuidedActionsController {
         id:                 guidedActionsController
         missionController:  _missionController
@@ -133,7 +134,7 @@ Item {
         width:              ScreenTools.defaultFontPixelWidth * 10
         color:              qgcPal.window
         visible:            false
-    }
+  }
 //地图
     FlyViewMap {
         id:                     mapControl

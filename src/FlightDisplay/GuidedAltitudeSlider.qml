@@ -67,6 +67,7 @@ Rectangle {
 
         QGCLabel {
             id:                         altField
+
             anchors.horizontalCenter:   parent.horizontalCenter
             text:                       newAltitudeAppUnits + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
 

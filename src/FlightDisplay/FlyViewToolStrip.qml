@@ -25,7 +25,5 @@ ToolStrip {
         onDisplayPreFlightChecklist: _root.displayPreFlightChecklist()
     }
 
-
-
     model: flyViewToolStripActionList.model
 }

@@ -21,42 +21,41 @@ import QGroundControl.Palette       1.0
 ColumnLayout {
     id:         root
     spacing:    ScreenTools.defaultFontPixelHeight / 4
-
     property real   _innerRadius:           (width - (_topBottomMargin * 3)) / 4
     property real   _outerRadius:           _innerRadius + _topBottomMargin
     property real   _spacing:               ScreenTools.defaultFontPixelHeight * 0.33
     property real   _topBottomMargin:       (width * 0.05) / 2
-
     QGCPalette { id: qgcPal }
-
     Rectangle {
         id:                 visualInstrument
         height:             _outerRadius * 2
         Layout.fillWidth:   true
         radius:             _outerRadius
-        color:              qgcPal.window
-
+        color:             "transparent"
+        //2022810修改参数底部颜色位置
         DeadMouseArea { anchors.fill: parent }
-
+//左罗盘
+        /*
         QGCAttitudeWidget {
             id:                     attitude
             anchors.leftMargin:     _topBottomMargin
             anchors.left:           parent.left
-            size:                   _innerRadius * 2
+            size:                   _innerRadius * 1.8
             vehicle:                globals.activeVehicle
             anchors.verticalCenter: parent.verticalCenter
-        }
+        }*/
 
+//右罗盘
         QGCCompassWidget {
             id:                     compass
-            anchors.leftMargin:     _spacing
-            anchors.left:           attitude.right
-            size:                   _innerRadius * 2
+//            anchors.leftMargin:     _spacing
+            anchors.right:           parent.right
+
+            size:                   _innerRadius * 1.5
             vehicle:                globals.activeVehicle
             anchors.verticalCenter: parent.verticalCenter
         }
     }
-
     TerrainProgress {
         Layout.fillWidth: true
     }

@@ -24,6 +24,7 @@ Rectangle {
     property real _outerMargin: (width * 0.05) / 2
     property real _outerRadius: width / 2
     property real _innerRadius: _outerRadius - _outerMargin
+    //2022810修改参数底部颜色位置
 
     // Prevent all clicks from going through to lower layers
     DeadMouseArea {
@@ -35,7 +36,7 @@ Rectangle {
         anchors.horizontalCenter:   parent.horizontalCenter
         anchors.topMargin:          _outerMargin
         anchors.top:                parent.top
-        size:                       _innerRadius * 2
+        size:                       _innerRadius * 1.5
         vehicle:                    globals.activeVehicle
     }
 
@@ -44,7 +45,7 @@ Rectangle {
         anchors.horizontalCenter:   parent.horizontalCenter
         anchors.topMargin:          _outerMargin * 2
         anchors.top:                attitude.bottom
-        size:                       _innerRadius * 2
+        size:                       _innerRadius * 1.5
         vehicle:                    globals.activeVehicle
     }
 }

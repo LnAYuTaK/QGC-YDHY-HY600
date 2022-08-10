@@ -36,7 +36,7 @@ T.HorizontalFactValueGrid {
     property real   _rowButtonWidth:        ScreenTools.minTouchPixels
     property real   _rowButtonHeight:       ScreenTools.minTouchPixels / 2
     property real   _editButtonSpacing:     2
-
+//调色板
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
     ColumnLayout {
@@ -68,7 +68,6 @@ T.HorizontalFactValueGrid {
                                 instrumentValueData:    object
                             }
                         }
-
                         Repeater {
                             id:     valueRepeater
                             model:  object
@@ -84,7 +83,7 @@ T.HorizontalFactValueGrid {
                                 }
                                 maxWidth = Math.min(maxWidth, newMaxWidth)
                             }
-
+                           //具体参数显示
                             InstrumentValueValue {
                                 Layout.fillHeight:      true
                                 Layout.alignment:       Qt.AlignLeft

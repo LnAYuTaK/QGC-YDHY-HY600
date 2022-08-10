@@ -203,7 +203,8 @@ QString VehicleDataFactPack::pack()
     return pack+checkSum;
 }
 
-DataController::DataController()
+DataController::DataController(void)
+ : _networkMgr()
 {
    //初始化内部参数datamap表存放数据
    dataFactMap = new QMap<int,VehicleDataFactPack *>;
@@ -211,7 +212,6 @@ DataController::DataController()
    MultiVehicleManager *manager = qgcApp()->toolbox()->multiVehicleManager();
    connect(manager,&MultiVehicleManager::vehicleAdded, this,&DataController::dataFactAdd);
    connect(manager,&MultiVehicleManager::vehicleRemoved, this,&DataController::dataFactRemove);
-
    connect(dataSendTimer,&QTimer::timeout,this,&DataController::sendData);
    connect(dataSendTimer,&QTimer::timeout,this,&DataController::saveDataLocal);
    dataSendTimer->setInterval(1000);
@@ -225,6 +225,7 @@ VehicleDataFactPack* DataController::createDataFact(Vehicle* vehicle)
   }
    return nullptr;
 }
+
 //这里比较繁琐后面改成函数模板//
 void DataController::dataFactAdd(Vehicle* vehicle)
 {

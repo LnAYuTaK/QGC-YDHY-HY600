@@ -1,4 +1,7 @@
 #include "NetWorkManager.h"
+
+class ParameterEditorController;
+
 LogSendTask ::LogSendTask (QString filename,QGCLogEntry* logentry)
 {
     this->_logFile  = filename;
@@ -80,7 +83,7 @@ void NetWorkManager::setToolbox(QGCToolbox *toolbox)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     qmlRegisterSingletonInstance<NetWorkManager>("QGroundControl.NetWorkManager", 1, 0, "NetWorkManager", qgcApp()->toolbox()->netWorkManager());
     //这里后续要更改初始化的位置
-    _datacontroller =new DataController();
+//    _datacontroller =new DataController();
 }
 
 bool NetWorkManager::addTask(QString filename,QGCLogEntry* logEntry)
