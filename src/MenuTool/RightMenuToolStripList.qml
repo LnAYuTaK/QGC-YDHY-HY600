@@ -2,7 +2,7 @@ import QtQml.Models 2.12
 
 import QGroundControl           1.0
 import QGroundControl.Controls  1.0
-
+//导航栏内部List
 ToolStripActionList {
     id: _root
     model: [

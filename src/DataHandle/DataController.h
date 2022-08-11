@@ -18,7 +18,7 @@
 
 #define   PACKHEAD  "EB90"
 
-//植保机DataFact
+//植保机DataFact//后期更改成策略模式
 class  VehicleDataFactPack:public QObject
 {
     Q_OBJECT
@@ -83,6 +83,10 @@ public slots:
       void _vehicleDataSendNumChanged();
 
 private:
+      //初始化PackList
+      void  _initPackList();
+      //整数小数分离
+      QVector <qint64> splitDouble(double data,qint16 digit);
       static bool      _flightState;
       static QString   _flightTime;
       static uint8_t   _sprayStat;
@@ -103,7 +107,6 @@ private:
       const QString    _softWareVersion;
       const QString    _fireWareVersion;
 
-      QVector <qint64> splitDouble(double data,qint16 digit);
       QVector <QString>vehiclePack;
 };
 //初始化静态变量
@@ -117,6 +120,7 @@ public:
      //send netdata
      void  sendData();
      void  saveDataLocal();
+     Q_INVOKABLE void  printTest();
 private:
     VehicleDataFactPack* createDataFact(Vehicle* vehicle);
     //

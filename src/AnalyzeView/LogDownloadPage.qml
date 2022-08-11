@@ -12,12 +12,13 @@ import QtQuick.Controls     1.2
 import QtQuick.Dialogs      1.2
 import QtQuick.Layouts      1.2
 
-import QGroundControl               1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.Controllers   1.0
-import QGroundControl.ScreenTools   1.0
+import QGroundControl                1.0
+import QGroundControl.Palette        1.0
+import QGroundControl.Controls       1.0
+import QGroundControl.Controllers    1.0
+import QGroundControl.ScreenTools    1.0
 import QGroundControl.NetWorkManager 1.0
+import QGroundControl.MenuTool       1.0
 
 
 //具体实现
@@ -31,7 +32,11 @@ AnalyzePage {
     property real _margin:          ScreenTools.defaultFontPixelWidth *0.5
     property real _butttonWidth:    ScreenTools.defaultFontPixelWidth * 10
 
+
     QGCPalette { id: palette; colorGroupEnabled: enabled }
+
+    LogDownloadController{id: logController }
+
 
     Component {
         id: pageComponent

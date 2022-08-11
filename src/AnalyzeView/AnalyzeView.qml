@@ -32,9 +32,9 @@ Rectangle {
     readonly property real  _verticalMargin:        _defaultTextHeight / 2
     readonly property real  _buttonWidth:           _defaultTextWidth * 18
 
-//    GeoTagController {
-//        id: geoController
-//    }
+    GeoTagController {
+        id: geoController
+    }
 
 
 //日志控制器负责日志的下载发送

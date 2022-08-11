@@ -3,7 +3,7 @@
 
 //调试宏
 #define DEBUGINFO
-//对外显示的数据
+//对外显示的数据初始化
 bool      VehicleDataFactPack::_flightState      = false;
 QString   VehicleDataFactPack::_flightTime       = "2020-02-20 20:20:20";
 uint8_t   VehicleDataFactPack::_sprayStat        = 0;
@@ -22,6 +22,13 @@ VehicleDataFactPack::VehicleDataFactPack(QObject *parent)
     : QObject{parent}
 {
    //初始化vehiclePack方便赋值
+    this->_initPackList();
+
+}
+
+void VehicleDataFactPack::_initPackList()
+{
+    this->vehiclePack.clear();
     vehiclePack.append(packHead);      //帧头   0
     vehiclePack.append(QString(4,'0')); //发送次数 1
     vehiclePack.append(QString(8,'0'));//起飞时间 2
@@ -45,6 +52,7 @@ VehicleDataFactPack::VehicleDataFactPack(QObject *parent)
     vehiclePack.append(QString(1,'0'));//液位计状态20
     vehiclePack.append(QString(1,'0'));//飞行模式21
 }
+
 //202282
 //数据处理
 void VehicleDataFactPack::_vehicleDataSendNumChanged()
@@ -226,6 +234,16 @@ VehicleDataFactPack* DataController::createDataFact(Vehicle* vehicle)
    return nullptr;
 }
 
+
+void DataController::printTest()
+{
+
+    qDebug()<< " WSSSSSSSSSSSSSSSSS";
+
+}
+
+
+
 //这里比较繁琐后面改成函数模板//
 void DataController::dataFactAdd(Vehicle* vehicle)
 {
@@ -269,10 +287,11 @@ void DataController::dataFactRemove(Vehicle* vehicle)
 //测试
 void DataController::sendData()
 {
-      mSocket.connectToHost("192.168.3.113",8900);
+      mSocket.connectToHost("192.168.3.113",8901);
       if(dataFactMap!=nullptr){
          VehicleDataFactPack *pack = dataFactMap->value(vehicleIDID);
          mSocket.write(pack->pack().toLocal8Bit());
+         mSocket.flush();
          emit sendDataNumAdd();
          mSocket.close();
       }

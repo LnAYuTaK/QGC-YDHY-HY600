@@ -438,10 +438,6 @@ QGCApplication::~QGCApplication()
     _app = nullptr;
 }
 
-
-
-
-
 void QGCApplication::_initCommon()
 {
     static const char* kRefOnly         = "Reference only";

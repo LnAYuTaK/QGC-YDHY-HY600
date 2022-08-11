@@ -74,11 +74,6 @@ public:
     //202288
     NetWorkManager *            netWorkManager          () {return _netWorkManager;}
 
-
-
-
-
-
 #if defined(QGC_ENABLE_PAIRING)
     PairingManager*             pairingManager          () { return _pairingManager; }
 #endif
