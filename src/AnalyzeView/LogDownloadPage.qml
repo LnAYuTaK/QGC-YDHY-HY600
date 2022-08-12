@@ -206,7 +206,7 @@ AnalyzePage {
                             if (o) o.selected = true
                             console.log(o.id)
                         })
-                        NetWorkManager.runTask();
+                        logController.sendLog();
 
                     }
 

@@ -24,6 +24,7 @@ LogSendTask::~LogSendTask()
 
 bool LogSendTask::_ready()
 {
+
     _file.setFileName(_logFile);
     if(_file.exists())
     {
@@ -48,25 +49,24 @@ bool LogSendTask::_ready()
 
 void LogSendTask::run()
 {
- QString IP =  "192.168.3.113";
- qint64 Port =  8901;
- QTcpSocket _targetSocket;
- _targetSocket.connectToHost(IP,Port);
- _targetSocket.waitForConnected(2000);
- if ((_targetSocket.state() != QAbstractSocket::ConnectedState)) {
-     _logEntry->setStatus("NET ERROR");
-      return;
- }
- //发送 请求包  和文件数据 没分包
- _targetSocket.write(_reqPack.toLatin1());
- qint64 sendSize = _targetSocket.write(_filedata);
- qDebug() <<"SendSize:"<< sendSize;
- //刷新下缓冲区
- _targetSocket.flush();
-
- //这里判断下服务器信息  更改不同状态现在暂定为发送成功
-  _logEntry->setStatus("SEND OK");
-  _targetSocket.close();
+     QString IP =  "192.168.3.113";
+     qint64 Port =  8901;
+     QTcpSocket _targetSocket;
+     _targetSocket.connectToHost(IP,Port);
+     _targetSocket.waitForConnected(2000);
+     if ((_targetSocket.state() != QAbstractSocket::ConnectedState)) {
+         _logEntry->setStatus("NET ERROR");
+          return;
+     }
+     //发送 请求包  和文件数据 没分包
+     _targetSocket.write(_reqPack.toLatin1());
+     qint64 sendSize = _targetSocket.write(_filedata);
+     qDebug() <<"SendSize:"<< sendSize;
+     //刷新下缓冲区
+     _targetSocket.flush();
+     //这里判断下服务器信息  更改不同状态现在暂定为发送成功
+     _logEntry->setStatus("SEND OK");
+     _targetSocket.close();
 }
 
 void LogSendTask ::work()
@@ -90,11 +90,15 @@ void NetWorkManager::setToolbox(QGCToolbox *toolbox)
     qmlRegisterSingletonInstance<NetWorkManager>("QGroundControl.NetWorkManager", 1, 0, "NetWorkManager", qgcApp()->toolbox()->netWorkManager());
 }
 
-
-bool NetWorkManager::addTask(QString filename,QGCLogEntry* logEntry)
+void NetWorkManager::createLogTask(QString filename,QGCLogEntry* logEntry)
 {
-   if(logEntry!=nullptr) {
-    LogSendTask* task = new LogSendTask(filename,logEntry);
+
+     LogSendTask* task = new LogSendTask(filename,logEntry);
+     this->addTask(task);
+}
+
+bool NetWorkManager::addTask(Task *task)
+{
     if(task!=nullptr){
        _mutex.lock();
        _taskQueue.enqueue(task);
@@ -102,8 +106,7 @@ bool NetWorkManager::addTask(QString filename,QGCLogEntry* logEntry)
        return true;
     }
     task->deleteLater();
-  }
-  return false;
+    return  false;
 }
 
 void NetWorkManager::_workerError(QString errorMessage)
@@ -111,11 +114,10 @@ void NetWorkManager::_workerError(QString errorMessage)
     _errorMessage = errorMessage;
 }
 
-//队列执行同步任务
+//执行队列里的任务
 void NetWorkManager::runTask()
 {
     Task* task = nullptr;
-    //
     forever{
         if (_taskQueue.isEmpty()) {
            break;

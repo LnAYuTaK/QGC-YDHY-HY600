@@ -3,3 +3,4 @@ RightMenuToolStrip     1.0     RightMenuToolStrip.qml
 RightMenuToolStripList 1.0     RightMenuToolStripList.qml
 UserMsgInfoView        1.0     UserMsgInfoView.qml
 FlightMsgPage          1.0     FlightMsgPage.qml
+DataTableView          1.0     DataTableView.qml

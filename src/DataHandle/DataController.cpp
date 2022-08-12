@@ -23,7 +23,6 @@ VehicleDataFactPack::VehicleDataFactPack(QObject *parent)
 {
    //初始化vehiclePack方便赋值
     this->_initPackList();
-
 }
 
 void VehicleDataFactPack::_initPackList()
@@ -237,9 +236,7 @@ VehicleDataFactPack* DataController::createDataFact(Vehicle* vehicle)
 
 void DataController::printTest()
 {
-
     qDebug()<< " WSSSSSSSSSSSSSSSSS";
-
 }
 
 
@@ -288,13 +285,15 @@ void DataController::dataFactRemove(Vehicle* vehicle)
 void DataController::sendData()
 {
       mSocket.connectToHost("192.168.3.113",8901);
-      if(dataFactMap!=nullptr){
-         VehicleDataFactPack *pack = dataFactMap->value(vehicleIDID);
-         mSocket.write(pack->pack().toLocal8Bit());
-         mSocket.flush();
-         emit sendDataNumAdd();
-         mSocket.close();
-      }
+      if (mSocket.waitForConnected(100)) {
+          if(dataFactMap!=nullptr){
+             VehicleDataFactPack *pack = dataFactMap->value(vehicleIDID);
+             mSocket.write(pack->pack().toLocal8Bit());
+             mSocket.flush();
+             emit sendDataNumAdd();
+             mSocket.close();
+          }
+     }
 }
 
 //TODU 需要重构

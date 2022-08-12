@@ -132,15 +132,15 @@ private:
     QMap<int,VehicleDataFactPack *> *dataFactMap=nullptr;
     //Test 定时器连接活跃的Vehicle
     QTimer  *dataSendTimer;
-    QTcpSocket mSocket;
 
+    QThread   mThread;
+
+    QTcpSocket mSocket;
 protected:
 
-
 signals:
-
-    void sendDataNumAdd();//发送次数增加
-
+    //发送次数增加
+    void sendDataNumAdd();
 private:
      NetWorkManager  *   _networkMgr =nullptr;
 

@@ -76,19 +76,18 @@ ApplicationWindow {
 
     //-------------------------------------------------------------------------
     //-- Global Scope Variables
-
     QtObject {
         id: globals
-
+        readonly  property var      dataController:                 toolbar.dataController
         readonly property var       activeVehicle:                  QGroundControl.multiVehicleManager.activeVehicle
         readonly property real      defaultTextHeight:              ScreenTools.defaultFontPixelHeight
         readonly property real      defaultTextWidth:               ScreenTools.defaultFontPixelWidth
         readonly property var       planMasterControllerFlyView:    flightView.planController
         readonly property var       guidedControllerFlyView:        flightView.guidedController
-
         property var                planMasterControllerPlanView:   null
         property var                currentPlanMissionItem:         planMasterControllerPlanView ? planMasterControllerPlanView.missionController.currentPlanViewItem : null
     }
+
 
     /// Default color palette used throughout the UI
     QGCPalette { id: qgcPal; colorGroupEnabled: true }
@@ -145,11 +144,6 @@ ApplicationWindow {
         viewSwitch(toolbar.planViewToolbar)
         planView.visible = true
     }
-
-//    function showMenuTool() {
-//      viewSwitch(toolbar.planViewToolbar)
-//      //planView.visible = true
-//    }
 
     //大界面
     function showTool(toolTitle, toolSource, toolIcon) {
@@ -346,9 +340,7 @@ ApplicationWindow {
     background: Item {
         id:             rootBackground
         anchors.fill:   parent
-
     }
-
     //-------------------------------------------------------------------------
     /// Toolbar
     //顶端任务栏
@@ -502,7 +494,6 @@ ApplicationWindow {
         property real leftInset: x + width
     }
 
-
 //飞行界面  地图
     FlyView {
         id:             flightView
@@ -513,9 +504,6 @@ ApplicationWindow {
         anchors.fill:   parent
         visible:        false
     }
-
-
-
 
     Drawer {
         id:             toolDrawer

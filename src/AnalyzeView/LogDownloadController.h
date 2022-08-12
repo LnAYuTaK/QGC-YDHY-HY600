@@ -133,7 +133,8 @@ public:
     Q_INVOKABLE void cancel                 ();
     //202282
     Q_INVOKABLE void filerData              (QString filerDataTyoe);
-
+    //2022812 将任务队列里的任务发送到后台
+    Q_INVOKABLE void sendLog                ();
     void downloadToDirectory(const QString& dir);
 
 signals:
@@ -142,6 +143,7 @@ signals:
     void modelChanged           ();
     void selectionChanged       ();
     //202288 下载完成
+
     void downloadcomplete       (QString filename,QGCLogEntry* logEntry);
 
 
@@ -179,6 +181,8 @@ private:
     int                 _retries;
     int                 _apmOneBased;
     QString             _downloadPath;
+    NetWorkManager*     _netWorkManager;
+
 
 
 

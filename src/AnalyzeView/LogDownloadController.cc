@@ -120,10 +120,9 @@ LogDownloadController::LogDownloadController(void)
 
     //202285
     _setActiveVehicle(manager->activeVehicle());
-    NetWorkManager *netmanager = qgcApp()->toolbox()->netWorkManager();
-    //202288
-    connect(this,&LogDownloadController::downloadcomplete,netmanager,&NetWorkManager::addTask);
-
+    _netWorkManager = qgcApp()->toolbox()->netWorkManager();
+    //202288  下载完成后将日志任务放到队列
+    connect(this,&LogDownloadController::downloadcomplete,_netWorkManager,&NetWorkManager::createLogTask);
 }
 
 //----------------------------------------------------------------------------------------
@@ -418,6 +417,7 @@ LogDownloadController::_receivedAllData()
         //-- Request Log
         _requestLogData(_downloadData->ID, 0, _downloadData->chunk_table.size()*MAVLINK_MSG_LOG_DATA_FIELD_DATA_LEN);
         _timer.start(kTimeOutMilliseconds);
+        //下载完成//
         QFileInfo fileInfo = QFileInfo(_downloadData->file);
         emit downloadcomplete(fileInfo.absoluteFilePath(),_downloadData->entry);
 
@@ -583,6 +583,16 @@ LogDownloadController::filerData(QString filerDataType)
     emit modelChanged         ();
 }
 //----------------------------------------------------------------------------------------
+void
+LogDownloadController::sendLog()
+{
+    if(_netWorkManager!=nullptr){
+        _netWorkManager->runTask();
+    }
+}
+//----------------------------------------------------------------------------------------
+
+
 QGCLogEntry*
 LogDownloadController::_getNextSelected()
 {

@@ -7,6 +7,7 @@ import QGroundControl.Palette       1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.Controllers   1.0
 import QGroundControl.ScreenTools   1.0
+
 //导航栏用户//显示Page
 //2022810
 Rectangle {
@@ -25,6 +26,8 @@ Rectangle {
    z:  QGroundControl.zOrderTopMost
    //调色板
    QGCPalette { id: qgcPal }
+
+
 
   //右侧的复选table
    QGCFlickable {
@@ -52,6 +55,7 @@ Rectangle {
                 panelLoader.title   =  "ti"
                 checked             =  true
             }
+
          }
      }
   }
@@ -97,7 +101,6 @@ Rectangle {
   //组件
   Component {
       id: windowedUserMsgInfoPage
-
       Window {
           width:      ScreenTools.defaultFontPixelWidth  * 100
           height:     ScreenTools.defaultFontPixelHeight * 40
@@ -120,5 +123,5 @@ Rectangle {
               source = ""
           }
       }
-  }
-}
+   }
+ }

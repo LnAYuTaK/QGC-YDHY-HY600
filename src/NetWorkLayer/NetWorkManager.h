@@ -58,15 +58,17 @@ public:
    //QGCTool overrides
    void setToolbox                     (QGCToolbox* toolbox) final;
    //实例化不同的任务
-   bool                  addTask       (QString filename , QGCLogEntry*  logEntry);
+   bool                  addTask       (Task * task);
    //执行所有任务
    Q_INVOKABLE void      runTask       ();
+   //实例化日志任务
+   Q_INVOKABLE void      createLogTask (QString filename , QGCLogEntry*  logEntry);
 private:
    QMutex                              _mutex;
    //错误信息
    QString                             _errorMessage;
    //日志的任务队列
-   QQueue<LogSendTask*>                _taskQueue;
+   QQueue<Task*>                       _taskQueue;
 
 private slots:
    void _workerError                  (QString errorMsg);

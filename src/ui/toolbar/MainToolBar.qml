@@ -30,15 +30,14 @@ Rectangle {
     readonly property int planViewToolbar:  1
     readonly property int simpleToolbar:    2
 
+    property var    dataController: dataController
+
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
     property color  _mainStatusBGColor: qgcPal.brandingPurple
     //调色板
     QGCPalette { id: qgcPal }
-
-    DataController{
-       id :dataController
-    }
+    DataController{id :dataController}
     /// Bottom single pixel divider
     Rectangle {
         anchors.left:   parent.left
@@ -107,10 +106,7 @@ Rectangle {
                                     (currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : "")
         }
     }
-
     //-------------------------------------------------------------------------
-
-
    QGCToolBarButton {
        id:                     menuToolBar
        Layout.preferredHeight: viewButtonRow.height
@@ -121,7 +117,6 @@ Rectangle {
        icon.source:           "/qmlimages/resources/ydhyImage/shezhi_7.svg"
        logo:                   true
        onClicked:              mainWindow.showRightToolStrip()
-
    }
 //-- Branding Logo
 //显示固件厂家图标
