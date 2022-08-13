@@ -957,9 +957,9 @@ signals:
 // 2022730
 //无人机起飞信号
     void vehicleTakeOff();
-//无人机降落
+//无人机降落更新架次
     void vehicleLand();
-//无人机起飞时间
+//无人机起飞时间  *每一个架次起飞时间相同
     void vehicleFlightTime(QString time);
 //无人机喷头喷头状态是否打开
     void vehicleSprayState(bool isOpen);

@@ -514,6 +514,7 @@ void QGCApplication::_initCommon()
 
 //2022810添加到qml 导入
     qmlRegisterType<DataController>                 (kQGCControllers,                       1, 0, "DataController");
+
     qmlRegisterType<TerrainProfile>                 ("QGroundControl.Controls",             1, 0, "TerrainProfile");
     qmlRegisterType<ToolStripAction>                ("QGroundControl.Controls",             1, 0, "ToolStripAction");
     qmlRegisterType<ToolStripActionList>            ("QGroundControl.Controls",             1, 0, "ToolStripActionList");

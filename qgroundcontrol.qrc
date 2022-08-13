@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/unittest">
         <file alias="FactSystemTest.qml">src/FactSystem/FactSystemTest.qml</file>
-        <file>src/MenuTool/DataTableView.qml</file>
     </qresource>
     <qresource prefix="/toolbar">
         <file alias="ArmedIndicator.qml">src/ui/toolbar/ArmedIndicator.qml</file>
@@ -289,7 +288,6 @@
         <file alias="QGroundControl/MenuTool/qmldir">src/QmlControls/QGroundControl/MenuTool/qmldir</file>
         <file alias="QGroundControl/MenuTool/UserMsgInfoView.qml">src/MenuTool/UserMsgInfoView.qml</file>
         <file alias="QGroundControl/MenuTool/FlightMsgPage.qml">src/MenuTool/FlightMsgPage.qml</file>
-        <file alias="QGroundControl/MenuTool/DataTableView.qml">src/MenuTool/DataTableView.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>

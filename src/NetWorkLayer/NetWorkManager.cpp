@@ -45,8 +45,7 @@ bool LogSendTask::_ready()
    emit  error("File Not Exists");
    return false;
 }
-
-
+//-------------------------------------------------------------------------------
 void LogSendTask::run()
 {
      QString IP =  "192.168.3.113";

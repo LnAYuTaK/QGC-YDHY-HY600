@@ -30,6 +30,10 @@ ApplicationWindow {
     minimumWidth:   ScreenTools.isMobile ? Screen.width  : Math.min(ScreenTools.defaultFontPixelWidth * 100, Screen.width)
     minimumHeight:  ScreenTools.isMobile ? Screen.height : Math.min(ScreenTools.defaultFontPixelWidth * 50, Screen.height)
     visible:        true
+
+    //全局定义方便取用  //不规范需要更改
+    //property var  dataController:      toolbar.dataController
+
     Component.onCompleted: {
         //-- Full screen on mobile or tiny screens
         if (ScreenTools.isMobile || Screen.height / ScreenTools.realPixelDensity < 120) {
@@ -78,7 +82,7 @@ ApplicationWindow {
     //-- Global Scope Variables
     QtObject {
         id: globals
-        readonly  property var      dataController:                 toolbar.dataController
+
         readonly property var       activeVehicle:                  QGroundControl.multiVehicleManager.activeVehicle
         readonly property real      defaultTextHeight:              ScreenTools.defaultFontPixelHeight
         readonly property real      defaultTextWidth:               ScreenTools.defaultFontPixelWidth
@@ -172,7 +176,7 @@ ApplicationWindow {
 
     //-------------------------------------------------------------------------
     //-- Global simple message dialog
-
+    //全局简单消息对话框 就是尖头的可以点击确定关闭的
     function showMessageDialog(dialogTitle, dialogText) {
         showPopupDialogFromComponent(simpleMessageDialog, { title: dialogTitle, text: dialogText })
     }
@@ -617,7 +621,7 @@ ApplicationWindow {
         y:                  ScreenTools.defaultFontPixelHeight
         x:                  Math.round((mainWindow.width - width) * 0.5)
         width:              mainWindow.width  * 0.55
-        height:             ScreenTools.defaultFontPixelHeight * 6
+        height:             ScreenTools.defaultFontPixelHeight * 20
         modal:              false
         focus:              true
         closePolicy:        Popup.CloseOnEscape
@@ -740,7 +744,7 @@ ApplicationWindow {
         property var    currentItem:        null
         property var    currentIndicator:   null
         background: Rectangle {
-            width:  loader.width
+            width:  loader.width*0.2
             height: loader.height
             color:  Qt.rgba(0,0,0,0)
         }

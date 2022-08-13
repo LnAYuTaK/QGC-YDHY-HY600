@@ -30,14 +30,17 @@ Rectangle {
     readonly property int planViewToolbar:  1
     readonly property int simpleToolbar:    2
 
-    property var    dataController: dataController
+// 在MainRootWindow中被调用
+    property var     dataController: _dataController
+
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
     property color  _mainStatusBGColor: qgcPal.brandingPurple
     //调色板
     QGCPalette { id: qgcPal }
-    DataController{id :dataController}
+    DataController{id :_dataController}
+
     /// Bottom single pixel divider
     Rectangle {
         anchors.left:   parent.left
@@ -47,6 +50,12 @@ Rectangle {
         color:          "black"
         visible:        qgcPal.globalTheme === QGCPalette.Light
     }
+
+    function hello()
+    {
+       dataController.printTest()
+    }
+
 
     Rectangle {
         anchors.fill:   viewButtonRow

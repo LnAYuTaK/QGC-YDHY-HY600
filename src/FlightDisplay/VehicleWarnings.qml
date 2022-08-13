@@ -56,4 +56,6 @@ Rectangle {
             text:                       qsTr("The vehicle has failed a pre-arm check. In order to arm the vehicle, resolve the failure.")
         }
     }
+
+
 }

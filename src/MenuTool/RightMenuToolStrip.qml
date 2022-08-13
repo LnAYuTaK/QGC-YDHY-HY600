@@ -11,7 +11,6 @@ ToolStrip{
     RightMenuToolStripList{
        id:rightMenuToolStripList
     }
-   model:rightMenuToolStripList.model
-
+   model:rightMenuToolStripList.model  
 }
 

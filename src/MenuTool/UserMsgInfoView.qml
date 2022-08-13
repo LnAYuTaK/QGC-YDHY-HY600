@@ -27,8 +27,6 @@ Rectangle {
    //调色板
    QGCPalette { id: qgcPal }
 
-
-
   //右侧的复选table
    QGCFlickable {
       id:userInfo
@@ -55,7 +53,6 @@ Rectangle {
                 panelLoader.title   =  "ti"
                 checked             =  true
             }
-
          }
      }
   }

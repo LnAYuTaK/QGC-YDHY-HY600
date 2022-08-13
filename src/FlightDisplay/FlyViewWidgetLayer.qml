@@ -250,7 +250,7 @@ Item {
         anchors.top:            parent.top
         z:                      QGroundControl.zOrderWidgets
         maxHeight:              parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
-        visible:                false
+        visible:                true
         onDisplayPreFlightChecklist: mainWindow.showPopupDialogFromComponent(preFlightChecklistPopup)
 
         property real leftInset: x + width
@@ -265,10 +265,13 @@ Item {
     }
 
     VehicleWarnings {
-        anchors.centerIn:   parent
-        z:                  QGroundControl.zOrderTopMost
+        anchors.left :        toolStrip.right
+        anchors.top:          mapScale.bottom
+        anchors.topMargin:    _toolsMargin
+        anchors.leftMargin:   _toolsMargin
+        z:                    QGroundControl.zOrderTopMost
     }
-
+    //放大缩小地图尺寸
     MapScale {
         id:                 mapScale
         anchors.margins:    _toolsMargin
@@ -283,7 +286,7 @@ Item {
 
     Component {
         id: preFlightChecklistPopup
-        FlyViewPreFlightChecklistPopup {
+             FlyViewPreFlightChecklistPopup {
         }
     }
 }

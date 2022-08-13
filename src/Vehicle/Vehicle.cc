@@ -1553,7 +1553,10 @@ void Vehicle::_updateArmed(bool armed)
             emit vehicleTakeOff();
         } else {
             _trajectoryPoints->stop();
+
             _flightTimerStop();
+
+
         //2022730
              emit vehicleLand();
             // Also handle Video Streaming
@@ -2269,6 +2272,7 @@ void Vehicle::_flightTimerStop()
 void Vehicle::_updateFlightTime()
 {
     _flightTimeFact.setRawValue((double)_flightTimer.elapsed() / 1000.0);
+
 }
 
 void Vehicle::_gotProgressUpdate(float progressValue)
@@ -2502,7 +2506,7 @@ void Vehicle::_handleFlightModeChanged(const QString& flightMode)
 {
     _say(tr("%1 %2 flight mode").arg(_vehicleIdSpeech()).arg(flightMode));
     emit guidedModeChanged(_firmwarePlugin->isGuidedMode(this));
-    vehicleFlightMode(flightMode);
+    emit vehicleFlightMode(flightMode);
 }
 
 void Vehicle::_announceArmedChanged(bool armed)

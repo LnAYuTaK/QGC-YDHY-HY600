@@ -26,6 +26,5 @@ ToolStripActionList {
             iconSource:     "/res/QGCLogoWhite"
             onTriggered:    mainWindow.showSettingsTool()
         }
-
     ]
 }

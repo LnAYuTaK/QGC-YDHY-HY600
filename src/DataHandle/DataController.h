@@ -15,28 +15,24 @@
 #include "Vehicle.h"
 #include  "Settings/HySettings.h"
 #include "NetWorkLayer/NetWorkManager.h"
+#include "FactGroup.h"
 
 #define   PACKHEAD  "EB90"
 
-//植保机DataFact//后期更改成策略模式
+//所有类型飞机数据包基类// Fact  重构
 class  VehicleDataFactPack:public QObject
 {
     Q_OBJECT
 public:
       explicit VehicleDataFactPack(QObject *parent = nullptr);
-      //qml获取数据的接口
-      QString   pack                      () ;
-      Q_INVOKABLE bool     flightState    () {return _flightState;}
-      Q_INVOKABLE QString  flightTime     () {return _flightTime;}
-      Q_INVOKABLE uint8_t  sprayState     () {return _sprayStat;}
-      Q_INVOKABLE int      id             () {return _id;}
-      Q_INVOKABLE uint8_t  flowRate       () {return _flowRate;}
-      Q_INVOKABLE double   workArea       () {return _workArea;}
-      Q_INVOKABLE double   lot            () {return _lot;}
-      Q_INVOKABLE double   lat            () {return _lat;}
-      Q_INVOKABLE double   flightTailTude () {return _flightTailTude;}
-      Q_INVOKABLE double   groundSpeed    () {return _groundSpeed;}
-      Q_INVOKABLE QString  flightMode     () {return _flightMode;}
+      //获取校验完成的数据
+      Q_INVOKABLE QString     pack          () ;
+
+      //获取架次信息
+      //Q_INVOKABLE QStringList get           (int index);
+      //列表总长度
+      Q_INVOKABLE int         listSize      () {return  flightMsgPack.size();}
+
       //飞行模式类型// 还有别的类型后续添加
       const QStringList FlightModeType {
               "PreFlight",
@@ -51,37 +47,26 @@ public:
 //处理从Vehcile接收的数据
 public slots:
       void _vehicleTakeOff();
-
       void _vehicleLand();
-
       void _vehicleFlightTime(QString time);
-
       void _vehicleSprayState(bool isOpen);
-
       void _vehicleid(int id);
-
       void _vehicleFlowRate(uint8_t flowRate);
-
       void _vehicleWorkArea(double workArea);
-
       void _vehicleLongitude(double lot);
-
       void _vehicleLatitude(double lat);
-
       void _vehicleFlighTaltiTude(double flightTaltiTude);
-
       void _vehicleGroundFlightSpeed(double groundSpeed);
-
       void _vehicleDataSendTime();
-
       void _vehicleLevelGaugeStatus(uint8_t gaugetype);
-
       void _vehicleFlightMode(QString flightmodetype);
-
       void _vehicleMsgText(QString messageText);
-
       void _vehicleDataSendNumChanged();
-
+//private slots:
+//      //更新飞行架次
+//       void _updataFlightSorties();
+//signals:
+//       void updata();
 private:
       //初始化PackList
       void  _initPackList();
@@ -97,7 +82,7 @@ private:
       static double    _lat;
       static double    _flightTailTude;
       static double    _groundSpeed;
-      static uint8_t    _gaugetype;
+      static uint8_t   _gaugetype;
       static QString   _flightMode;
       //是否更新飞行架次flag
       static bool      _upDataFlightFlag;
@@ -106,45 +91,45 @@ private:
       //版本和固件号通过暂时获取通过HySetting获取
       const QString    _softWareVersion;
       const QString    _fireWareVersion;
-
+      //存放所有信息
       QVector <QString>vehiclePack;
+      //存放每一架次的飞行记录信息   QStringList << |用户账号|起飞时间|飞行用时|喷洒区域|喷洒亩数|喷洒农药用量|飞行控制号码|飞行距离|作物种类
+      QVector <QStringList> flightMsgPack;
 };
-//初始化静态变量
-
 //数据管理类
 class DataController: public QObject
 {
     Q_OBJECT
 public:
      DataController(void);
-     //send netdata
+     //发送日志数据到后台
      void  sendData();
+     //存储后台所需数据到本地文本TXT
      void  saveDataLocal();
-     Q_INVOKABLE void  printTest();
+    //Test
+
 private:
     VehicleDataFactPack* createDataFact(Vehicle* vehicle);
-    //
+    //自动绑定Vehicle 和dataFact
     void dataFactAdd(Vehicle* vehicle);
-    //
+    //飞机移除自动删除dataFact
     void dataFactRemove(Vehicle* vehicle);
-    //Key&Value
+    //加载配置
+    //void LoadSetting();
     //Vehicle ID  ---  VehicleDataFactPack pointer
-    QMap<int,VehicleDataFactPack *> *dataFactMap=nullptr;
     //Test 定时器连接活跃的Vehicle
-    QTimer  *dataSendTimer;
-
+    VehicleDataFactPack * _dataPack    = nullptr;
+    QTimer              * dataSendTimer =nullptr;
     QThread   mThread;
-
     QTcpSocket mSocket;
 protected:
 
 signals:
     //发送次数增加
     void sendDataNumAdd();
+    //
 private:
      NetWorkManager  *   _networkMgr =nullptr;
-
-
 };
 
 #endif // DATAMANAGER_H

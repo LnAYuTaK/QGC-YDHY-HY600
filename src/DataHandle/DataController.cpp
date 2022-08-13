@@ -1,8 +1,10 @@
 #include "DataController.h"
 //初始化 VehicleDataFactPack
-
 //调试宏
 #define DEBUGINFO
+
+//飞机类型定义 不要动
+#define HY600
 //对外显示的数据初始化
 bool      VehicleDataFactPack::_flightState      = false;
 QString   VehicleDataFactPack::_flightTime       = "2020-02-20 20:20:20";
@@ -17,7 +19,6 @@ double    VehicleDataFactPack::_groundSpeed      = 0;
 bool      VehicleDataFactPack::_upDataFlightFlag = false;
 uint8_t   VehicleDataFactPack::_gaugetype        = 1;
 QString   VehicleDataFactPack::_flightMode       = "";
-int vehicleIDID=0;
 VehicleDataFactPack::VehicleDataFactPack(QObject *parent)
     : QObject{parent}
 {
@@ -184,7 +185,7 @@ void VehicleDataFactPack::_vehicleFlightMode(QString flightmodetype)
       vehiclePack[21] = QString("%1").arg(1,1,16,QLatin1Char('0'));
     }
 }
-//返回临时QVector
+//整数小数分离
 QVector <qint64> VehicleDataFactPack::splitDouble(double data,qint16 digit)
 {
   QVector <qint64> temp ;
@@ -209,46 +210,48 @@ QString VehicleDataFactPack::pack()
     QString checkSum   = QString("%1").arg(checksumtemp,4,16,QLatin1Char('0'));
     return pack+checkSum;
 }
+//更新架次信息
+//void VehicleDataFactPack::_updataFlightSorties()
+//{
+//    QStringList list;
+//    QString userName = "010";
+
+//}
 
 DataController::DataController(void)
  : _networkMgr()
 {
-   //初始化内部参数datamap表存放数据
-   dataFactMap = new QMap<int,VehicleDataFactPack *>;
    dataSendTimer =new  QTimer();
    MultiVehicleManager *manager = qgcApp()->toolbox()->multiVehicleManager();
    connect(manager,&MultiVehicleManager::vehicleAdded, this,&DataController::dataFactAdd);
    connect(manager,&MultiVehicleManager::vehicleRemoved, this,&DataController::dataFactRemove);
+   //定时发送飞行信息到后台
    connect(dataSendTimer,&QTimer::timeout,this,&DataController::sendData);
+   //本地日志记录
    connect(dataSendTimer,&QTimer::timeout,this,&DataController::saveDataLocal);
+   //本地数据库记录TUDO
    dataSendTimer->setInterval(1000);
 }
 
 VehicleDataFactPack* DataController::createDataFact(Vehicle* vehicle)
 {
   if(vehicle!=nullptr){
-    VehicleDataFactPack * data = new VehicleDataFactPack();
-    return data;
+   //为不同类型飞机实例化不同的需求
+   #ifdef HY600
+      if(this->_dataPack==nullptr){
+          _dataPack =new VehicleDataFactPack();
+      }
+   #endif
+     return _dataPack;
   }
    return nullptr;
 }
-
-
-void DataController::printTest()
-{
-    qDebug()<< " WSSSSSSSSSSSSSSSSS";
-}
-
-
 
 //这里比较繁琐后面改成函数模板//
 void DataController::dataFactAdd(Vehicle* vehicle)
 {
    VehicleDataFactPack * data  =this->createDataFact(vehicle);
    if((data!=nullptr)){
-       dataFactMap->insert(vehicle->id(),data);
-       //一个Vehicle 对应一个datafact的先测试这么用
-       vehicleIDID = vehicle->id();
        connect(vehicle,&Vehicle::vehicleTakeOff,data,&VehicleDataFactPack::_vehicleTakeOff);
        connect(vehicle,&Vehicle::vehicleLand,data,&VehicleDataFactPack::_vehicleLand);
        connect(vehicle,&Vehicle::vehicleFlightTime,data,&VehicleDataFactPack::_vehicleFlightTime);
@@ -270,14 +273,9 @@ void DataController::dataFactAdd(Vehicle* vehicle)
 
 void DataController::dataFactRemove(Vehicle* vehicle)
 {
-    if(vehicle!=nullptr||(!dataFactMap->isEmpty()))
-    {
-        if(dataFactMap->contains(vehicle->id()))
-        {
+    if(vehicle!=nullptr&&_dataPack!=nullptr){
+           _dataPack->deleteLater();
            dataSendTimer->stop();
-           dataFactMap->value(vehicle->id())->deleteLater();
-           dataFactMap->remove(vehicle->id());
-        }
     }
 }
 
@@ -286,21 +284,21 @@ void DataController::sendData()
 {
       mSocket.connectToHost("192.168.3.113",8901);
       if (mSocket.waitForConnected(100)) {
-          if(dataFactMap!=nullptr){
-             VehicleDataFactPack *pack = dataFactMap->value(vehicleIDID);
-             mSocket.write(pack->pack().toLocal8Bit());
+          if(_dataPack!=nullptr){
+             if(mSocket.write(_dataPack->pack().toLocal8Bit())){
+                emit sendDataNumAdd();
+             }
              mSocket.flush();
-             emit sendDataNumAdd();
              mSocket.close();
           }
-     }
+      }
 }
 
 //TODU 需要重构
 //这里是存储到本地 根据AppSetting 的文件夹存放
 void DataController::saveDataLocal()
 {
-   VehicleDataFactPack *pack = dataFactMap->value(vehicleIDID);
+   if(_dataPack!=nullptr){
    QString min = QDateTime::currentDateTime().toString("yyyyMMdd");
    QString timestr = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
 #if !defined(__android__)
@@ -320,9 +318,10 @@ void DataController::saveDataLocal()
        qDebug()<<"Write Error";
        return;
    }
-   in <<pack->pack().toLocal8Bit();
+   in <<_dataPack->pack().toLocal8Bit();
    f.flush();
    f.close();
+   }
 }
 
 
