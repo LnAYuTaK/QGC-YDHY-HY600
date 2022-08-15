@@ -215,5 +215,6 @@
         <file>resources/ydhyImage/shezhitianchong.svg</file>
         <file>resources/ydhyImage/shezhixitongshezhigongnengshezhishuxing.svg</file>
         <file>resources/ydhyImage/yonghu.svg</file>
+        <file>resources/lianjie.svg</file>
     </qresource>
 </RCC>

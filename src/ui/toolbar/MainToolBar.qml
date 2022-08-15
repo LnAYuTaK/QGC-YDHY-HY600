@@ -55,8 +55,6 @@ Rectangle {
     {
        dataController.printTest()
     }
-
-
     Rectangle {
         anchors.fill:   viewButtonRow
         visible:        currentToolbar === flyViewToolbar

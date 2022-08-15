@@ -19,6 +19,7 @@ double    VehicleDataFactPack::_groundSpeed      = 0;
 bool      VehicleDataFactPack::_upDataFlightFlag = false;
 uint8_t   VehicleDataFactPack::_gaugetype        = 1;
 QString   VehicleDataFactPack::_flightMode       = "";
+
 VehicleDataFactPack::VehicleDataFactPack(QObject *parent)
     : QObject{parent}
 {
@@ -52,7 +53,6 @@ void VehicleDataFactPack::_initPackList()
     vehiclePack.append(QString(1,'0'));//液位计状态20
     vehiclePack.append(QString(1,'0'));//飞行模式21
 }
-
 //202282
 //数据处理
 void VehicleDataFactPack::_vehicleDataSendNumChanged()
@@ -225,12 +225,15 @@ DataController::DataController(void)
    MultiVehicleManager *manager = qgcApp()->toolbox()->multiVehicleManager();
    connect(manager,&MultiVehicleManager::vehicleAdded, this,&DataController::dataFactAdd);
    connect(manager,&MultiVehicleManager::vehicleRemoved, this,&DataController::dataFactRemove);
-   //定时发送飞行信息到后台
+   //定时1秒发送一次飞行信息到后台
    connect(dataSendTimer,&QTimer::timeout,this,&DataController::sendData);
    //本地日志记录
    connect(dataSendTimer,&QTimer::timeout,this,&DataController::saveDataLocal);
-   //本地数据库记录TUDO
    dataSendTimer->setInterval(1000);
+   //本地数据库记录TUDO
+
+
+
 }
 
 VehicleDataFactPack* DataController::createDataFact(Vehicle* vehicle)
@@ -279,7 +282,7 @@ void DataController::dataFactRemove(Vehicle* vehicle)
     }
 }
 
-//测试
+//发送到后台
 void DataController::sendData()
 {
       mSocket.connectToHost("192.168.3.113",8901);

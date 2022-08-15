@@ -23,6 +23,7 @@ import QGroundControl.MenuTool      1.0
 AnalyzePage {
     id:                 logDownloadPage
     pageComponent:      pageComponent
+    pageDescription:    qsTr("这里显示飞行架次等飞行信息.点击左侧上传即可回传当日日志 ")
     //间隔
     property var    _multVehicleMgr:                    QGroundControl.multiVehicleManager
 
@@ -38,6 +39,7 @@ AnalyzePage {
     RowLayout {
           width:  availableWidth
           height: availableHeight
+          spacing  :_margin
           FlyViewMap {
               id:     map
               height: parent.height
@@ -50,10 +52,7 @@ AnalyzePage {
           TableView {
             id: tableView
             Layout.fillHeight:  true
-            anchors.leftMargin: _margin
-            anchors.left: map.right
-            anchors.right:buttonlist.left
-            anchors.rightMargin: _margin
+            Layout.fillWidth:  true
             clip  :  true
             //每一列的属性
             TableViewColumn  {
@@ -94,15 +93,18 @@ AnalyzePage {
      Column {
               id :buttonlist
               spacing:         10
-              anchors.right:parent.right
-              anchors.rightMargin: _margin
-              anchors.top : parent.top
+              Layout.alignment: Qt.AlignRight
+              Layout.margins :_margin
+              Layout.fillHeight:  true
               QGCButton{
                   text:       qsTr("刷新")
                   width:      _butttonWidth
                   onClicked:{
-
-
+                      if (!QGroundControl.multiVehicleManager.activeVehicle || QGroundControl.multiVehicleManager.activeVehicle.isOfflineEditingVehicle) {
+                          mainWindow.showMessageDialog(qsTr("刷新"), qsTr("你必须连接上无人机."))
+                      } else {
+//
+                      }
                   }
 
               }
@@ -111,8 +113,11 @@ AnalyzePage {
                   text:       qsTr("回传")
                   width:      _butttonWidth
                   onClicked:{
-
-
+                      if (!QGroundControl.multiVehicleManager.activeVehicle || QGroundControl.multiVehicleManager.activeVehicle.isOfflineEditingVehicle) {
+                          mainWindow.showMessageDialog(qsTr("日志回传"), qsTr("你必须连接上无人机."))
+                      } else {
+//
+                      }
                   }
 
               }

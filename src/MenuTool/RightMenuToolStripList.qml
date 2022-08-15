@@ -22,9 +22,20 @@ ToolStripActionList {
             onTriggered:    mainWindow.showSetupTool()
         },
         ToolStripAction {
+            text:           qsTr("连接")
+            iconSource:     "/qmlimages/resources/lianjie.svg"
+//          onTriggered:    mainWindow.showSetupTool()
+        },
+        ToolStripAction {
+            text:           qsTr("参数")
+            iconSource:     "/qmlimages/PatternPresets.png"
+//          onTriggered:    mainWindow.showSetupTool()
+        },
+        ToolStripAction {
             text:           qsTr("系统")
             iconSource:     "/res/QGCLogoWhite"
             onTriggered:    mainWindow.showSettingsTool()
         }
+
     ]
 }
